@@ -10,51 +10,52 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "geometry.h"
+#include "encoding.h"
 
 int main()
 {
     int width;
     int height;
 
-    if ( !scanf("%d", width) || width < 0) {
+    if ( !scanf("%d", &width) || width < 0) {
         return EXIT_FAILURE;
     }
 
-    if ( !scanf("%d", height) || height < 0) {
+    if ( !scanf("%d", &height) || height < 0) {
         return EXIT_FAILURE;
     }
 
     double x1;
     double y1;
 
-    if ( !scanf("%lf", x1)) {
+    if ( !scanf("%lf", &x1)) { 
         return EXIT_FAILURE;
     }
 
-    if ( !scanf("%lf", y1)) {
+    if ( !scanf("%lf", &y1)) {
         return EXIT_FAILURE;
     }
 
     double x2;
     double y2;
 
-    if ( !scanf("%lf", x2)){
+    if ( !scanf("%lf", &x2)){
         return EXIT_FAILURE;
     }
 
-    if ( !scanf("%lf", y2)) {
+    if ( !scanf("%lf", &y2)) {
         return EXIT_FAILURE;
     }
 
     double x3;
     double y3;
 
-    if ( !scanf("%lf", x3)) {
+    if ( !scanf("%lf", &x3)) {
         return EXIT_FAILURE;
     }
 
-    if ( !scanf("%lf", y3)) {
+    if ( !scanf("%lf", &y3)) {
         return EXIT_FAILURE;
     }
 
@@ -62,17 +63,21 @@ int main()
     int green;
     int blue;
 
-    if ( !scanf("%d", red) || red < 0 || red > 255) {
+    if ( !scanf("%d", &red) || red < 0 || red > CMAX) {
         return EXIT_FAILURE;
     }
 
-    if ( !scanf("%d", green) || green < 0 || green > 255) {
+    if ( !scanf("%d", &green) || green < 0 || green > CMAX) {
         return EXIT_FAILURE;
     }
     
-    if ( !scanf("%d", blue) || blue < 0 || blue > 255) {
+    if ( !scanf("%d", &blue) || blue < 0 || blue > CMAX) { 
         return EXIT_FAILURE;
     }
+    
+    printHeader(width, height);
+    
+    
 
     return EXIT_SUCCESS;
 }
