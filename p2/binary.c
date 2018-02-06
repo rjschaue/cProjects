@@ -2,6 +2,8 @@
     
 */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "encoding.h"
 
 void printHeader( int width, int height ) {
@@ -12,5 +14,5 @@ void printHeader( int width, int height ) {
 
 
 void printValue( unsigned char c ) {
-
+    putchar(c);
 }

@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "geometry.h"
 #include "encoding.h"
+#define BLACK 0
 
 int main()
 {
@@ -77,7 +78,21 @@ int main()
     
     printHeader(width, height);
     
-    
+    for (int x = 0; i < width; i++) {
+        for (int y = 0; k < height; k++) {
+            if (inside(x1, y1, x2, y2, x3, y3, x, y)) {
+                printValue(red);
+                printValue(green);
+                printValue(blue);
+            } else {
+                printValue(BLACK);
+                printValue(BLACK);
+                printValue(BLACK);
+            }
+        }
+    } 
+
+    printf("\n");
 
     return EXIT_SUCCESS;
 }
