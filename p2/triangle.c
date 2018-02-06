@@ -78,8 +78,8 @@ int main()
     
     printHeader(width, height);
     
-    for (int x = 0; i < width; i++) {
-        for (int y = 0; k < height; k++) {
+    for (int x = 0; x <= width; x++) {
+        for (int y = 0; y <= height; y++) {
             if (inside(x1, y1, x2, y2, x3, y3, x, y)) {
                 printValue(red);
                 printValue(green);

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include "encoding.h"
 #define MAX_LINE_LENGTH 70
-#define MAX_INT_LENGTH 3
 #define INT_LENGTH_CHECK 10
 
 void printHeader( int width, int height ) {
@@ -28,10 +27,13 @@ void printValue( unsigned char c ) {
     }
 
     if (lineLength + intLength > MAX_LINE_LENGTH) {
-        printf("\n%d", c);
+        printf("\n%d", color);
+        lineLength = intLength;
     } else if (lineLength == 0) {
-        printf("%d", c);
+        printf("%d", color);
+        lineLength += intLength;
     } else {
-        printf(" %d", c);
+        printf(" %d", color);
+        lineLength += intLength + 1;
     }
 }

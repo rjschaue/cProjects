@@ -2,11 +2,15 @@
     
 */
 
-bool leftOf(double xa, double ya, double xb, double yb, double x, double y) {
-    int xVector = xb - xa;
-    int yVector = yb - ya;
+#include "geometry.h"
 
-    if (xVector * y - yVector * x < 0) {
+bool leftOf(double xa, double ya, double xb, double yb, double x, double y) {
+    double xVectorE = xb - xa;
+    double yVectorE = yb - ya;
+    double xVectorP = x - xa;
+    double yVectorP = y - ya;
+
+    if (xVectorE * yVectorP - yVectorE * xVectorP < 0) {
         return true;
     } else {
         return false;
