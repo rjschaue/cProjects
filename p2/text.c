@@ -18,7 +18,7 @@ void printHeader( int width, int height ) {
 void printValue( unsigned char c ) {
     static int lineLength = 0;
     
-    int color = (int) c;
+    int color = c;
     int intLength = 1;
     
     while (color >= INT_LENGTH_CHECK) {
@@ -26,14 +26,14 @@ void printValue( unsigned char c ) {
         intLength++;
     }
 
-    if (lineLength + intLength > MAX_LINE_LENGTH) {
-        printf("\n%d", color);
+    if (lineLength + intLength + 1 > MAX_LINE_LENGTH) {
+        printf("\n%d", c);
         lineLength = intLength;
     } else if (lineLength == 0) {
-        printf("%d", color);
+        printf("%d", c);
         lineLength += intLength;
     } else {
-        printf(" %d", color);
+        printf(" %d", c);
         lineLength += intLength + 1;
     }
 }
