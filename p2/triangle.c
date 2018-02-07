@@ -1,11 +1,11 @@
 /**
-  @file triangle.c
-  @author Joey Schauer (rjschaue)
+    @file triangle.c
+    @author Joey Schauer (rjschaue)
 
-  This program will take integer and floating point values from standard
-  input that represent a triangle. The first two are integers for width and 
-  height of image. The next six are floating point values for each vertex of
-  the triangle. The last 3 integers are RGB color values for the triangle.
+    This program will take integer and floating point values from standard
+    input that represent a triangle. The first two are integers for width and
+    height of image. The next six are floating point values for each vertex of
+    the triangle. The last 3 integers are RGB color values for the triangle.
 */
 
 #include <stdio.h>
@@ -44,7 +44,7 @@ int main()
     double y1;
 
     // Checks given value for x1, exits program if invalid.
-    if ( !scanf("%lf", &x1)) { 
+    if ( !scanf("%lf", &x1)) {
         return EXIT_FAILURE;
     }
 
@@ -81,7 +81,7 @@ int main()
     // Checks given value for y3, exits program if invalid.
     if ( !scanf("%lf", &y3)) {
         return EXIT_FAILURE;
-    } 
+    }
 
     // Gets red RGB value for the triangle.
     int red;
@@ -101,7 +101,7 @@ int main()
     }
     
     // Checks given value for blue, exits program if invalid.
-    if ( !scanf("%d", &blue) || blue < 0 || blue > CMAX) { 
+    if ( !scanf("%d", &blue) || blue < 0 || blue > CMAX) {
         return EXIT_FAILURE;
     }
     
@@ -109,7 +109,7 @@ int main()
     printHeader(width, height);
     
     // Traverses each pixel in the draw box and checks to see if it is inside
-    // the triangle or not, colors with given RGB values if inside the 
+    // the triangle or not, colors with given RGB values if inside the
     // triangle, otherwise colors the pixel black.
     for (double y = 0.5; y < width; y++) {
         for (double x = 0.5; x < height; x++) {
@@ -123,7 +123,7 @@ int main()
                 printValue(BLACK);
             }
         }
-    } 
+    }
     
     // Ends the file with a newline character.
     printf("\n");

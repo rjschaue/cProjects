@@ -1,15 +1,25 @@
-/** Replace with your own file block comment.
- */
+/** 
+    @file encoding.h
+    @author Joey Schauer (rjschaue)
+    
+    This program prints out the relevant header and color values
+    for a ppm file.
+*/
 
 /** Maximum color component value. */
 #define CMAX 255
 
-/** Replace with your own function block comment.
-    Remember, for functions prototyped in a header, the block
-    comment goes on the prototype.
- */
+/**
+    Prints the header for the ppm file using a given width and height.
+
+    @param width the width of the draw box
+    @param height the height of the draw box
+*/
 void printHeader( int width, int height );
 
-/** Replace with your own function block comment.
- */
+/**
+    Prints out the given RGB character
+
+    @param c is the character to be printed out
+*/
 void printValue( unsigned char c );

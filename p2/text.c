@@ -14,21 +14,12 @@
 /** The value to divide by to check the length of an integer */
 #define INT_LENGTH_CHECK 10
 
-/**
-    Prints the header for the text ppm file using a given width and height.
-
-    @param width the width of the draw box
-    @param height the height of the draw box
-*/
 void printHeader( int width, int height ) {
     printf("P3\n");
     printf("%d %d\n", width, height);
     printf("%d\n", CMAX);
 }
 
-/**
-    Prints the given RGB character out as plain text.
-*/
 void printValue( unsigned char c ) {
     // The static variable to determine the current length of the line.
     static int lineLength = 0;
