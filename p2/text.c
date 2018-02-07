@@ -2,7 +2,7 @@
     @file text.c
     @author Joey Schauer (rjschaue)
     
-    This program prints out the header and RGB values for a text ppm file. 
+    This program prints out the header and RGB values for a text ppm file.
 */
 
 #include <stdio.h>

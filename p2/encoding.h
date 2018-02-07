@@ -1,4 +1,4 @@
-/** 
+/**
     @file encoding.h
     @author Joey Schauer (rjschaue)
     

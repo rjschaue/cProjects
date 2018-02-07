@@ -3,7 +3,7 @@
     @author Joey Schauer (rjschaue)
     
     This program has functions to print out the header and any RGB values in
-    binary format as a ppm image file.    
+    binary format as a ppm image file.
 */
 
 #include <stdio.h>

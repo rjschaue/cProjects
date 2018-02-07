@@ -3,7 +3,7 @@
    @author Joey Schauer (rjschaue)
    
    This program checks to see if given coordinates fall inside the given
-   coordinates for a triangle using the left of formula. 
+   coordinates for a triangle using the left of formula.
 */
 
 #include "geometry.h"
@@ -36,5 +36,5 @@ bool inside(double x1, double y1, double x2, double y2, double x3, double y3,
         return true;
     } else {
         return false;
-    }    
+    }
 }

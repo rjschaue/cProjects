@@ -1,4 +1,4 @@
-/** 
+/**
     @file geometry.h
     @author Joey Schauer (rjschaue)
 
