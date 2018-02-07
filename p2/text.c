@@ -1,31 +1,51 @@
 /**
+    @file text.c
+    @author Joey Schauer (rjschaue)
     
+    This program prints out the header and RGB values for a text ppm file. 
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "encoding.h"
+
+/** The max length for a line of text */
 #define MAX_LINE_LENGTH 70
+/** The value to divide by to check the length of an integer */
 #define INT_LENGTH_CHECK 10
 
+/**
+    Prints the header for the text ppm file using a given width and height.
+
+    @param width the width of the draw box
+    @param height the height of the draw box
+*/
 void printHeader( int width, int height ) {
     printf("P3\n");
     printf("%d %d\n", width, height);
     printf("%d\n", CMAX);
 }
 
-
+/**
+    Prints the given RGB character out as plain text.
+*/
 void printValue( unsigned char c ) {
+    // The static variable to determine the current length of the line.
     static int lineLength = 0;
     
+    // Converts the character to an integer.
     int color = c;
+    // Gets the length of the integer.
     int intLength = 1;
     
+    // Determines the length of the color by division.
     while (color >= INT_LENGTH_CHECK) {
         color /= INT_LENGTH_CHECK;
         intLength++;
     }
 
+    // Prints out the character, ensuring the lines do not exceed a maximum
+    // length value and are separated by spaces.
     if (lineLength + intLength + 1 > MAX_LINE_LENGTH) {
         printf("\n%d", c);
         lineLength = intLength;
