@@ -15,7 +15,7 @@
 
 /** Constant for the color black. */
 #define BLACK 0
-
+#define INCREMENT 0.5
 /**
     Program starting point. Reads inital values from standard input.
 
@@ -111,8 +111,9 @@ int main()
     // Traverses each pixel in the draw box and checks to see if it is inside
     // the triangle or not, colors with given RGB values if inside the
     // triangle, otherwise colors the pixel black.
-    for (double y = 0.5; y < width; y++) {
-        for (double x = 0.5; x < height; x++) {
+
+    for (double y = INCREMENT; y < height; y++) {
+        for (double x = INCREMENT; x < width; x++) {
             if (inside(x1, y1, x2, y2, x3, y3, x, y)) {
                 printValue(red);
                 printValue(green);
