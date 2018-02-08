@@ -44,6 +44,7 @@ bool leftOf( double xa, double ya, double xb, double yb,
     @param y3 is the third y coordinate of the triangle
     @param x is the x coordinate of the point to be checked
     @param y is the y coordinate of the point to be checked
+    
     @return true if the point is inside the triangle
 */
 bool inside( double x1, double y1, double x2, double y2,

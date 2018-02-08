@@ -15,7 +15,9 @@
 
 /** Constant for the color black. */
 #define BLACK 0
+/** Increment for x and y coordinates */
 #define INCREMENT 0.5
+
 /**
     Program starting point. Reads inital values from standard input.
 
