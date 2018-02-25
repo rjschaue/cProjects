@@ -10,7 +10,7 @@
 
     @param word is the word to be output
 */
-void displayword( char word[] );
+void displayWord( char word[] );
 
 /**
     Displays the hangman figure as user incorrectly guesses letters

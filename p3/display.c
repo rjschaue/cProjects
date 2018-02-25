@@ -7,7 +7,7 @@
 
 #include "display.h"
 #include <stdio.h>
-#include <stdllib.h>
+#include <stdlib.h>
 
 void displayWord( char word[] ) {
     for ( int i = 0; word[i]; i++ ) {

@@ -4,9 +4,11 @@
     
     Contains the protoypes for the wordlist functions
 */
+#define MAX_WORDS 50
+#define WORD_LENGTH_MAX 21
 
 /** global variable that gets a list of words up to 20 characters in length */
-extern char words[20][50];
+extern char words[MAX_WORDS][WORD_LENGTH_MAX];
 
 /** global variable that counts the number of words in the above list */
 extern int wordCount;
