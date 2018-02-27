@@ -8,11 +8,12 @@
 #include "display.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void displayWord( char word[] ) {
     for ( int i = 0; word[i]; i++ ) {
         printf("%c", word[i]);
-        if ( word[i + 1] ) {
+        if ( i < strlen(word) ) {
             printf(" ");
         }
     }

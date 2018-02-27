@@ -9,12 +9,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#define WORD_CAPACITY 100
 
 char words[MAX_WORDS][WORD_LENGTH_MAX];
 
 int wordCount = 0;
-
 
 void readWords( char const *filename ) {
     FILE *stream = fopen( filename, "r" );
@@ -24,8 +22,8 @@ void readWords( char const *filename ) {
         exit(EXIT_FAILURE);
     }
     
-    char string[WORD_CAPACITY];
-    while (fscanf(stream, "%99s", string) == 1) {
+    char string[MAX_WORDS] = ""; 
+    while (fscanf(stream, "%s", string) == 1) {
         wordCount++;
         if (wordCount > MAX_WORDS) {
             fprintf(stderr, "Invalid word file");
@@ -35,13 +33,13 @@ void readWords( char const *filename ) {
             fprintf(stderr, "Invalid word file");
             exit(EXIT_FAILURE);
         }
-        for (int i = 0; i <= string[i]; i++) {
+        for (int i = 0; string[i]; i++) {
             if (string[i] < 'a' || string[i] > 'z') {
                 fprintf(stderr, "Invalid word file");
                 exit(EXIT_FAILURE);
             }
         }
-        strcpy(words[wordCount], string);
+        strcpy(words[wordCount - 1], string);
     }
 
     fclose(stream);
