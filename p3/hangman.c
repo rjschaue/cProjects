@@ -28,26 +28,27 @@
 */
 int main( int argc, char *argv[] ) {
     if (argc < 2) {
-        fprintf(stderr, "usage: hangman <> []");
+        fprintf(stderr, "usage: hangman <word-file> [seed]\n");
         return EXIT_FAILURE;
     } else if (argc > 2 && atoi(argv[2]) < 0) {
-        fprintf(stderr, "usage: hangman <%s> [%s]", argv[1], argv[2]);
+        fprintf(stderr, "usage: hangman <word-file> [seed]\n");
         return EXIT_FAILURE;
     }
-      
+     
     readWords( argv[1] );
-   
+
     int seed = 0;
-    if (argc > 2) {       
+    if (argc > 2) {
         seed = atoi(argv[2]);
-    } 
+    }
 
     if (seed > 0) {
         srand(seed);
     } else {
         srand(time(NULL));
     }
-
+    
+    printf("\n");
     while (true) {
         int index = rand() % wordCount;
 
@@ -55,9 +56,9 @@ int main( int argc, char *argv[] ) {
         strcpy(word,  words[index]);
 
         int letterLength = NUMBER_OF_LETTERS;
-        char letters[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 
-                          'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 
-                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 
+        char letters[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+                          'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
                           'y', 'z'};
 
         int wordLength = strlen(word + 1);
@@ -68,16 +69,16 @@ int main( int argc, char *argv[] ) {
         }
 
         int numberOfParts = 0;
-
+        
         while (true) {
-            displayFigure(numberOfParts);
+            displayFigure(numberOfParts);            
             if (numberOfParts == MAX_PARTS) {
                 printf("You lose!\n");
-                printf("The word was %s\n", word);
+                printf("Word was %s\n\n", word);
                 break;
             }
             displayWord(tempWord);
-
+            printf("\n");
             printf("Remaining letters: ");
             for (int i = 0; i < letterLength; i++) {
                 printf("%c", letters[i]);
@@ -85,16 +86,18 @@ int main( int argc, char *argv[] ) {
                     printf(" ");
                 }
             }
-            printf("\n");
+            printf("\n\n");
             
             char letter[MAX_WORDS] = "";
             bool letterFound = false;
             while (true) {
                 printf("letter> ");
-                scanf("%s", letter);
+                if (scanf("%s", letter) == EOF) {
+                    return EXIT_SUCCESS;
+                }
                 printf("\n");
                 if (strlen(letter) > 1) {
-                    printf("Invalid letter\n");
+                    printf("Invalid letter\n\n");
                 } else {
                     for (int i = 0; i < letterLength; i++) {
                         if (letters[i] == letter[0]) {
@@ -109,7 +112,7 @@ int main( int argc, char *argv[] ) {
                     if (letterFound) {
                         break;
                     } else {
-                        printf("Invalid Letter\n");
+                        printf("Invalid letter\n\n");
                     }
                 }
             }
@@ -123,7 +126,9 @@ int main( int argc, char *argv[] ) {
                 }
             }
             if (strcmp(word, tempWord) == 0) {
-                printf("You win!\n");
+                displayWord(word);
+                printf("\n");
+                printf("You win!\n\n");
                 break;
             }
         } 
@@ -137,4 +142,3 @@ int main( int argc, char *argv[] ) {
     }
     return EXIT_SUCCESS;
 }
-
