@@ -38,7 +38,7 @@ int main( int argc, char *argv[] )
         fprintf(stderr, "usage: hangman <word-file> [seed]\n");
         return EXIT_FAILURE;
     }
- 
+
     //Adds words from file to global word list
     readWords( argv[1] );
 
