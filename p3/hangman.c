@@ -26,7 +26,8 @@
     
     @return program exit status
 */
-int main( int argc, char *argv[] ) {
+int main( int argc, char *argv[] ) 
+{
     //Error testing for incorrect number of command line arguments
     if (argc < 2) {
         fprintf(stderr, "usage: hangman <word-file> [seed]\n");

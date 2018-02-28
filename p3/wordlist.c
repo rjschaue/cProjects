@@ -14,7 +14,9 @@ char words[MAX_WORDS][WORD_LENGTH_MAX];
 
 int wordCount = 0;
 
-void readWords( char const *filename ) {
+void readWords( char const *filename ) 
+{
+    //Opens file and prints error if it fails
     FILE *stream = fopen( filename, "r" );
 
     if (!stream) {
@@ -22,6 +24,7 @@ void readWords( char const *filename ) {
         exit(EXIT_FAILURE);
     }
     
+    //Checks strings in file for invalid input, stores in array if fine
     char string[MAX_WORDS] = "";
     while (fscanf(stream, "%s", string) == 1) {
         wordCount++;

@@ -10,7 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void displayWord( char word[] ) {
+void displayWord( char word[] ) 
+{
     for ( int i = 0; word[i]; i++ ) {
         printf("%c", word[i]);
         if ( i < strlen(word) - 1) {
@@ -20,7 +21,8 @@ void displayWord( char word[] ) {
     printf("\n");
 }
 
-void displayFigure( int numberOfParts ) {
+void displayFigure( int numberOfParts ) 
+{
     if ( numberOfParts == 1 ) {
         printf(" O \n\n");
     } else if ( numberOfParts == 2 ) {
