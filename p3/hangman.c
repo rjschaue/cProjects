@@ -15,7 +15,9 @@
 #include <time.h>
 #include <stdbool.h>
 
+/** Constant for the number of lowercase letters */
 #define NUMBER_OF_LETTERS 26
+/** Constant for the max number of hangman parts */
 #define MAX_PARTS 7
 
 /**
@@ -75,7 +77,8 @@ int main( int argc, char *argv[] )
         for (int i = 0; tempWord[i]; i++) {
             tempWord[i] = '_';
         }
-
+        
+        //Gets the number of parts on the hangman
         int numberOfParts = 0;
         
         //Loop for the hangman parts, printing letters and user success/failure
@@ -101,7 +104,9 @@ int main( int argc, char *argv[] )
             }
             printf("\n\n");
             
+            //Gets the letter from user
             char letter[MAX_WORDS] = "";
+            //Gets if a letter is valid
             bool letterFound = false;
             
             //Checks user input for letter guesses
