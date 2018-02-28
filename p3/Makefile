@@ -8,6 +8,6 @@ display.o: display.h
 wordlist.o: wordlist.h
 
 clean:
-	rm -f main.o display.o wordlist.o
+	rm -f hangman.o display.o wordlist.o
 	rm -f hangman
 	rm -f output.txt stdout.txt
