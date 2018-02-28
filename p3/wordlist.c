@@ -14,7 +14,7 @@ char words[MAX_WORDS][WORD_LENGTH_MAX];
 
 int wordCount = 0;
 
-void readWords( char const *filename ) 
+void readWords( char const *filename )
 {
     //Opens file and prints error if it fails
     FILE *stream = fopen( filename, "r" );
