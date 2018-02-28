@@ -26,7 +26,7 @@
     
     @return program exit status
 */
-int main( int argc, char *argv[] ) 
+int main( int argc, char *argv[] )
 {
     //Error testing for incorrect number of command line arguments
     if (argc < 2) {
@@ -36,11 +36,11 @@ int main( int argc, char *argv[] )
         fprintf(stderr, "usage: hangman <word-file> [seed]\n");
         return EXIT_FAILURE;
     }
-    
-    //Adds words from file to global word list 
+ 
+    //Adds words from file to global word list
     readWords( argv[1] );
 
-    //Seeds the randomizer 
+    //Seeds the randomizer
     int seed = 0;
     if (argc > 2) {
         seed = atoi(argv[2]);
@@ -67,7 +67,7 @@ int main( int argc, char *argv[] )
                           'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
                           'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
                           'y', 'z'};
-        
+
         //Creates a temporary word to be filled in as letters are guessed
         int wordLength = strlen(word + 1);
         char tempWord[wordLength];
@@ -81,7 +81,7 @@ int main( int argc, char *argv[] )
         //Loop for the hangman parts, printing letters and user success/failure
         while (true) {
             //Prints hangman figure and outputs if user fails
-            displayFigure(numberOfParts);            
+            displayFigure(numberOfParts);
             if (numberOfParts == MAX_PARTS) {
                 printf("You lose!\n");
                 printf("Word was %s\n\n", word);
@@ -153,7 +153,7 @@ int main( int argc, char *argv[] )
                 printf("You win!\n\n");
                 break;
             }
-        } 
+        }
         //Prompts user if they want to play again, exiting for anything other
         //than a 'y' or 'Y'
         printf("Play again(y,n)> ");
@@ -162,7 +162,7 @@ int main( int argc, char *argv[] )
         if ((terminate[0] != 'y' && terminate[0] != 'Y') || terminate[0] == EOF) {
             return EXIT_SUCCESS;
         }
-        printf("\n");            
+        printf("\n");
     }
     return EXIT_SUCCESS;
 }
