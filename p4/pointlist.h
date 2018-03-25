@@ -13,7 +13,7 @@ typedef struct {
   /** The current capacity of the list */
   int cap;
   /** A pointer to a dynamically allocated array of pointers to Point */
-  Point *list[];
+  Point **list;
 } Pointlist;
 
 /**
