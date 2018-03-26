@@ -6,15 +6,6 @@
 */
 
 #include "point.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#define NAME_MAX_LEN 20
-#define STRING_BUFFER 30
-#define DESC_BUFFER 1025
-#define DEG_TO_RAD ( M_PI / 180 )
-#define EARTH_RADIUS 3959.0
 
 Point *parsePoint() 
 {
@@ -22,25 +13,35 @@ Point *parsePoint()
   
   char string[STRING_BUFFER];
   
-  if (scanf("%s", string) == 1) {
-    if (strlen(string) > NAME_MAX_LEN) {
+  if (scanf("%99s", string) == 1) {
+    if (strlen(string) > NAME_LENGTH) {
       return NULL;
     }
     strcpy(p->name, string);
   } else {
     return NULL;
   }
+ 
 
-  if (scanf("%lf%lf", p->location->lat, p->location->lon) != 2) {
+  if (scanf("%lf%lf", &(p->location.lat), &(p->location.lon)) != 2) {
     return NULL;
   }
   
+  if (p->location.lat < -90.0 || p->location.lat > 90.0) {
+    return NULL;
+  }
+
+  if (p->location.lon < -180.0 || p->location.lon > 180.0) {
+    return NULL;
+  }
+
   char description[DESC_BUFFER];
   if (scanf("%1024[^\n\t]", description) != 1) {
     return NULL;
   }
 
   p->desc = (char *)malloc( strlen(description) + 1 );
+
   strcpy(p->desc, description);
 
   getchar();
@@ -56,7 +57,7 @@ void freePoint( Point *pt )
 
 void reportPoint( Point const *pt, Coords const *ref ) 
 {
-  printf("%s%.1lf\n", pt->name, globalDistance(ref, pt->location));
+  printf("%s%.1lf\n", pt->name, globalDistance(ref, &(pt->location)));
   printf("  %s\n", pt->desc);
 }
 

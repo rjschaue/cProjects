@@ -6,6 +6,12 @@
     working with a Pointlist
 */
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "point.h"
+
 /** This struct contains a resizeable array of pointers to Point instances */
 typedef struct {
   /** Counts the number of Points currently on the list */

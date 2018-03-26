@@ -5,10 +5,20 @@
     This header contains the Coords and Point structs along with any
     relevant functions for working with these structs
 */
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
 
 #ifndef POINT_H
 #define POINT_H
 #define NAME_LENGTH 20
+#define STRING_BUFFER 100
+#define DESC_BUFFER 1025
+#define DEG_TO_RAD ( M_PI / 180 )
+#define EARTH_RADIUS 3959.0
+
 
 /** Representation for a location, in latitude and longitude. */
 typedef struct {
