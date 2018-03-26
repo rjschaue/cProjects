@@ -13,8 +13,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
-Coords *user;
+Coords user = {35.772325, -78.673581};
 
 /**
     Static function used to implement the list command
@@ -35,9 +36,7 @@ static bool list(Point const *pt, void *data) {
     @return true if the Point should be output or false if not
 */ 
 static bool nearby(Point const *pt, void *data) {
-  double *distance = (double *) data;
-
-  if (globalDistance(user, &(pt->location)) <= *distance) {
+  if (globalDistance(&user, &(pt->location)) <= *((double *) data)) {
     return true;
   } else {
     return false;
@@ -51,14 +50,32 @@ static bool nearby(Point const *pt, void *data) {
     @return true if the Point should be output or false if not
 */ 
 static bool match(Point const *pt, void *data) {
-  char matchstr[NAME_LENGTH +1] = "";
-  strcpy(matchstr, (char *) data);
+  char matchStr[NAME_LENGTH +1] = "";
+  strcpy(matchStr, (char *) data);
+  
+  char testStr[STRING_BUFFER] = "";
+  int testNum = 0;
 
-  if (strcmp(matchstr, pt->name) == 0) {
-    return true;
-  } else {
-    return false;
+  for (int i = 0; pt->desc[i]; i++) {
+    if (pt->desc[i] != ' ' && pt->desc[i] != '-' && pt->desc[i] != ',') {
+      testStr[testNum++] = tolower(pt->desc[i]);
+    } else {
+      testStr[testNum] = '\0';
+
+      if (strcmp(matchStr, testStr) == 0) {
+        return true;
+      }
+      
+      if (strcasestr(testStr, matchStr) != NULL) {
+        return true;
+      }
+
+      strcpy(testStr, "");
+      testNum = 0;
+    }
   }
+  
+  return false;
 }
 
 /**
@@ -72,8 +89,6 @@ static bool match(Point const *pt, void *data) {
 int main(int argc, char *argv[])
 {
   int promptNum = 1;
-  user->lat = 35.772325;
-  user->lon = -78.673581;
 
   Pointlist *ptlist = createPointlist();
 
@@ -82,13 +97,15 @@ int main(int argc, char *argv[])
     bool valid = true;
 
     printf("%d> ", promptNum);
-    scanf("%99s", choice);
+    int state = scanf("%s", choice);
 
-    if(choice[0] == EOF || strcmp(choice, "quit")) {
+    printf("\n");
+
+    if(state == EOF || strcmp(choice, "quit") == 0) {
       break;
     }
 
-    if(strcmp(choice, "add")) {
+    if(strcmp(choice, "add") == 0) {
       
       Point *pt = parsePoint();
       
@@ -100,11 +117,11 @@ int main(int argc, char *argv[])
         }
       }  
 
-    } else if(strcmp(choice, "remove")) {
+    } else if(strcmp(choice, "remove") == 0) {
       
       char name[STRING_BUFFER] = "";
       
-      if (scanf("%99s", name) == 1) {
+      if (scanf("%s", name) == 1) {
         if(removePoint(ptlist, name) == false) {
           valid = false;
         }
@@ -112,7 +129,7 @@ int main(int argc, char *argv[])
         valid = false;
       }
 
-    } else if(strcmp(choice, "move")) {
+    } else if(strcmp(choice, "move") == 0) {
       double lat = 0.0;
       double lon = 0.0;
 
@@ -120,18 +137,18 @@ int main(int argc, char *argv[])
         if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0) {
           valid = false;
         } else {
-          user->lat = lat;
-          user->lon = lon;
+          user.lat = lat;
+          user.lon = lon;
         }
       } else {
         valid = false;
       }
 
-    } else if(strcmp(choice, "list")) {
+    } else if(strcmp(choice, "list") == 0) {
       
-      listPoints(ptlist, user, list, NULL);
+      listPoints(ptlist, &user, list, NULL);
     
-    } else if(strcmp(choice, "nearby")) {
+    } else if(strcmp(choice, "nearby") == 0) {
       
       double dist = 0.0;
       double *distp;
@@ -141,17 +158,17 @@ int main(int argc, char *argv[])
           valid = false;
         } else {
           distp = &dist;
-          listPoints(ptlist, user, nearby, distp);
+          listPoints(ptlist, &user, nearby, distp);
         }
       } else {
         valid = false;
       }
 
-    } else if(strcmp(choice, "match")) {
+    } else if(strcmp(choice, "match") == 0) {
       
       char matchstr[STRING_BUFFER] = "";
 
-      if (scanf("%99s", matchstr) == 1) {
+      if (scanf("%s", matchstr) == 1) {
         if (strlen(matchstr) > 20) {
           valid = false;
         } else {
@@ -165,7 +182,7 @@ int main(int argc, char *argv[])
           }
 
           if (validstr) {
-            listPoints(ptlist, user, match, matchstr);
+            listPoints(ptlist, &user, match, matchstr);
           } else {
             valid = false;
           }
@@ -173,7 +190,7 @@ int main(int argc, char *argv[])
       } else {
         valid = false;
       }
-    } else if(strcmp(choice, "help")) {
+    } else if(strcmp(choice, "help") == 0) {
       printf("add <name> <latitude> <longitude> <description>\n");
       printf("remove <name>\n");
       printf("move <latitude> <longitude>\n");
@@ -193,11 +210,10 @@ int main(int argc, char *argv[])
     }
     
     promptNum++;
-
-    printf("\n");
   }
 
   freePointlist(ptlist);
+  return EXIT_SUCCESS;
 }
 
 

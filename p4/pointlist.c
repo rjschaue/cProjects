@@ -7,8 +7,6 @@
 
 #include "pointlist.h"
 
-Coords *user;
-
 Pointlist *createPointlist() 
 {
   Pointlist *pl = (Pointlist *)malloc(sizeof(Pointlist));
@@ -17,6 +15,10 @@ Pointlist *createPointlist()
   pl->cap = 10;
 
   pl->list = (Point **)malloc(pl->cap * sizeof(Point *));
+  
+  for (int i = 0; i < pl->cap; i++) {
+    pl->list[i] = (Point *)malloc( sizeof(Point) );
+  }
 
   return pl;
 }
@@ -63,27 +65,36 @@ bool removePoint( Pointlist *ptlist, char const *name )
   return false;
 }
 
-int compare (const void *p1, const void *p2) {
-  Point *point1 = (Point *) p1;
-  Point *point2 = (Point *) p2;
-  if (globalDistance(&(point1->location), user) < 
-      globalDistance(&(point2->location), user)) {
-    return -1;
-  } else if (globalDistance(&(point1->location), user) == 
-      globalDistance(&(point2->location), user)) {
-    return 0;
-  } else {
-    return 1;
-  }
+void swap(Point *a, Point *b) {
+  Point temp = *a;
+  *a = *b;
+  *b = temp;
 }
+
+void quickSort(Pointlist *ptlist, int low, int high, Coords const *ref) {
+  if (low < high) {
+    Coords pivot = ptlist->list[high]->location;
+    int i = (low - 1);
+
+    for (int k = low; k <= high - 1; k++) {
+      if (globalDistance(&(ptlist->list[k]->location), ref)
+          < globalDistance(&pivot, ref)) {
+        i++;
+        swap(ptlist->list[i], ptlist->list[k]);
+      }
+    }
+    swap(ptlist->list[i+1], ptlist->list[high]);
+    i++;
+
+    quickSort(ptlist, low, i - 1, ref);
+    quickSort(ptlist, i + 1, high, ref);
+  }
+} 
 
 void listPoints( Pointlist *ptlist, Coords const *ref,
                  bool (*test)( Point const *pt, void *data ), void *data ) 
 {
-  user->lat = ref->lat;
-  user->lon = ref->lon;
-  
-  qsort(ptlist, ptlist->count, sizeof(Point *), compare);
+  quickSort(ptlist, 0, ptlist->count, ref);
 
   for (int i = 0; i < ptlist->count; i++) {
     bool print = test(ptlist->list[i], data);
