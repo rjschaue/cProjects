@@ -57,16 +57,20 @@ static bool match(Point const *pt, void *data) {
   int testNum = 0;
 
   for (int i = 0; pt->desc[i]; i++) {
-    if (pt->desc[i] != ' ' && pt->desc[i] != '-' && pt->desc[i] != ',') {
+    if ((pt->desc[i] != ' ' && pt->desc[i] != '-' && pt->desc[i] != ',')
+        || pt->desc[i+1] == '\0') {
       testStr[testNum++] = tolower(pt->desc[i]);
+      if (pt->desc[i+1] == '\0') {
+        testStr[testNum] = '\0';
+
+        if (strcmp(matchStr, testStr) == 0) {
+          return true;
+        }
+      }
     } else {
       testStr[testNum] = '\0';
 
       if (strcmp(matchStr, testStr) == 0) {
-        return true;
-      }
-      
-      if (strcasestr(testStr, matchStr) != NULL) {
         return true;
       }
 

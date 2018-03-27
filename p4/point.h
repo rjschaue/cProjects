@@ -15,7 +15,8 @@
 #define POINT_H
 #define NAME_LENGTH 20
 #define STRING_BUFFER 100
-#define DESC_BUFFER 1025
+#define DESC_LENGTH 1024
+#define MAX_BUFFER 4095
 #define DEG_TO_RAD ( M_PI / 180 )
 #define EARTH_RADIUS 3959.0
 

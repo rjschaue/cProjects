@@ -36,15 +36,15 @@ Point *parsePoint()
     return NULL;
   }
 
-  char description[DESC_BUFFER];
-  if (scanf("%[^\n\t]", description) != 1) {
+  char description[MAX_BUFFER] = "";
+  if (scanf("%[^\n\t]", description) == 1) {
+    if (strlen(description) > DESC_LENGTH + 1) {
+      return NULL;
+    }
+  } else {
     return NULL;
   }
-
-  if (strlen(description) > (DESC_BUFFER - 1)) {
-    return NULL;
-  }
-
+ 
   p->desc = (char *)malloc( strlen(description) + 1 );
 
   strcpy(p->desc, description);
