@@ -41,6 +41,10 @@ Point *parsePoint()
     return NULL;
   }
 
+  if (strlen(description) > (DESC_BUFFER - 1)) {
+    return NULL;
+  }
+
   p->desc = (char *)malloc( strlen(description) + 1 );
 
   strcpy(p->desc, description);

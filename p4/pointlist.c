@@ -25,7 +25,7 @@ Pointlist *createPointlist()
 
 void freePointlist( Pointlist *ptlist ) 
 {
-  for(int i = 0; i < ptlist->cap; i++) {
+  for(int i = 0; i < ptlist->count; i++) {
     free(ptlist->list[i]);
   }
   free(ptlist);
@@ -73,12 +73,12 @@ void swap(Point *a, Point *b) {
 
 void quickSort(Pointlist *ptlist, int low, int high, Coords const *ref) {
   if (low < high) {
-    Coords pivot = ptlist->list[high]->location;
+    Coords *pivot = &(ptlist->list[high]->location);
     int i = (low - 1);
 
     for (int k = low; k <= high - 1; k++) {
       if (globalDistance(&(ptlist->list[k]->location), ref)
-          < globalDistance(&pivot, ref)) {
+          < globalDistance(pivot, ref)) {
         i++;
         swap(ptlist->list[i], ptlist->list[k]);
       }
@@ -94,7 +94,7 @@ void quickSort(Pointlist *ptlist, int low, int high, Coords const *ref) {
 void listPoints( Pointlist *ptlist, Coords const *ref,
                  bool (*test)( Point const *pt, void *data ), void *data ) 
 {
-  quickSort(ptlist, 0, ptlist->count, ref);
+  quickSort(ptlist, 0, ptlist->count - 1, ref);
 
   for (int i = 0; i < ptlist->count; i++) {
     bool print = test(ptlist->list[i], data);
