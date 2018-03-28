@@ -125,5 +125,3 @@ void listPoints( Pointlist *ptlist, Coords const *ref,
     }
   }
 }
-
-

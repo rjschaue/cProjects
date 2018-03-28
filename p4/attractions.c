@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
       double lon = 0.0;
 
       if (scanf("%lf%lf", &lat, &lon) == 2) {
-        if (lat < LAT_MIN || lat > LAT_MAX 
+        if (lat < LAT_MIN || lat > LAT_MAX
             || lon < LON_MIN || lon > LON_MAX) {
           valid = false;
         } else {
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
       printf("help\n");
       printf("quit\n");
 
-      //Otherwise user entered invalid input    
+      //Otherwise user entered invalid input
     } else {
       valid = false;
     }
