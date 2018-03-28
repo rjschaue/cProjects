@@ -7,10 +7,12 @@
 
 #include "point.h"
 
-Point *parsePoint() 
+Point *parsePoint()
 {
+  // Dynamically allocates memory for the point
   Point *p = (Point *)malloc(sizeof(Point));
-  
+
+  //Gets a string from stdin for a name and checks validity
   strcpy(p->name, "");
 
   char string[STRING_BUFFER] = "";
@@ -24,18 +26,20 @@ Point *parsePoint()
     return NULL;
   }
 
+  //Gets a latitude and longitude value from stdin and checks validity
   if (scanf("%lf%lf", &(p->location.lat), &(p->location.lon)) != 2) {
     return NULL;
   }
   
-  if (p->location.lat < -90.0 || p->location.lat > 90.0) {
+  if (p->location.lat < LAT_MIN || p->location.lat > LAT_MAX) {
     return NULL;
   }
 
-  if (p->location.lon < -180.0 || p->location.lon > 180.0) {
+  if (p->location.lon < LON_MIN || p->location.lon > LON_MAX) {
     return NULL;
   }
 
+  //Gets a description from stdin and checks validity
   char description[MAX_BUFFER] = "";
   if (scanf("%[^\n\t]", description) == 1) {
     if (strlen(description) > DESC_LENGTH + 1) {
@@ -44,7 +48,7 @@ Point *parsePoint()
   } else {
     return NULL;
   }
- 
+
   p->desc = (char *)malloc( strlen(description) + 1 );
 
   strcpy(p->desc, description);
@@ -52,21 +56,21 @@ Point *parsePoint()
   return p;
 }
 
-void freePoint( Point *pt ) 
+void freePoint( Point *pt )
 {
   free(pt->desc);
   free(pt);
 }
 
-void reportPoint( Point const *pt, Coords const *ref ) 
+void reportPoint( Point const *pt, Coords const *ref )
 {
   printf("%s (%.1lf miles)\n", pt->name, globalDistance(ref, &(pt->location)));
   printf(" %s\n", pt->desc);
 }
 
-double globalDistance( Coords const *c1, Coords const *c2 ) 
+double globalDistance( Coords const *c1, Coords const *c2 )
 {
- 
+
   double v1[] = { cos( c1->lon * DEG_TO_RAD ) * cos( c1->lat * DEG_TO_RAD ),
                   sin( c1->lon * DEG_TO_RAD ) * cos( c1->lat * DEG_TO_RAD ),
                   sin( c1->lat * DEG_TO_RAD ) };

@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "point.h"
+/** The starting capacity for the point list */
+#define START_LIST_CAP 10
 
 /** This struct contains a resizeable array of pointers to Point instances */
 typedef struct {
@@ -53,7 +55,7 @@ bool addPoint( Pointlist *ptlist, Point *pt );
     @param ptlist is the Pointlist to remove from
     @param name is the name of the Point to remove
     @return true if successful, false if there is no Point with the given name
-*/ 
+*/
 bool removePoint( Pointlist *ptlist, char const *name );
 
 /**

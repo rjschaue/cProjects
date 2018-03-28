@@ -13,13 +13,26 @@
 
 #ifndef POINT_H
 #define POINT_H
+/** Maximum length of a name in Point */
 #define NAME_LENGTH 20
+/** Buffer for holding a name string */
 #define STRING_BUFFER 100
+/** Max length of a description */
 #define DESC_LENGTH 1024
+/** Buffer for holding a description string */
 #define MAX_BUFFER 4095
+/** Degrees to radians calculation */
 #define DEG_TO_RAD ( M_PI / 180 )
+/** Radius of the earth */
 #define EARTH_RADIUS 3959.0
-
+/** Minimum latitude value */
+#define LAT_MIN -90
+/** Maximum latitude value */
+#define LAT_MAX 90
+/** Minimum longitude value */
+#define LON_MIN -180
+/** Maximum longitude value */
+#define LON_MAX 180
 
 /** Representation for a location, in latitude and longitude. */
 typedef struct {
@@ -39,7 +52,7 @@ typedef struct {
   Coords location;
 
   /** A description of the point */
-  char *desc;  
+  char *desc;
 } Point;
 
 /**
