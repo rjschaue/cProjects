@@ -1,6 +1,6 @@
 /**
     @file bits.h
-    @author
+    @author Joey Schauer (rjschaue)
 
     Header file for the bits.c component, with functions supporting
     reading and writing a file a byte at a time and buffering bits for
