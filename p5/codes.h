@@ -14,15 +14,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define STRING_BUFFER 20
+
 /**
    The struct to represent a Node that contains a symbol and it's binary
    representation.
 */  
 typedef struct NodeTag {
     /** A string representing the symbol */ 
-    char *symbol;
+    char symbol;
     /** A string representing the binary version of the symbol */
-    char *binary;
+    char binary[STRING_BUFFER];
     /** The next node in the sequence */
     struct NodeTag *next;
 } Node;
@@ -42,14 +44,14 @@ typedef struct {
     @param list is the list to store codes to
     @param fp is a pointer to the file to get codes from
 */
-void populateList( List *list, FILE *fp );
+void populateList(char const *filename );
 
 /**
     Function used to free memory from the dynamically allocated list
     
     @param list is the list to free memory for
 */
-void freeList( List *list );
+void freeList();
 
 /**
     This function returns a string containing the code used to represent the

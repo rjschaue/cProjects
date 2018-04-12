@@ -19,5 +19,53 @@
 */
 int main(int argc, char *argv[]) 
 {
+    if (argc < 4) {
+        fprintf(stderr, "usage: encode <codes-file> <infile> <outfile>\n");
+        return EXIT_FAILURE;
+    }
 
+    populateList(argv[1]);
+    
+    FILE *input = fopen( argv[2], "r" );
+
+    if (!input) {
+        freeList();
+        perror(argv[2]);
+        return EXIT_FAILURE;
+    }
+
+    FILE *encoded = fopen( argv[3], "wb" );
+
+    if (!encoded) {
+        freeList();
+        perror(argv[3]);
+        return EXIT_FAILURE;
+    }
+
+    char c[1] = {};
+
+    BitBuffer *buffer;
+    buffer->bits = 0x00;
+    buffer->bcount = 0;
+
+    while (fread(c, 1, 1, input) != 0) {
+
+        if (c[0] < 'a' || c[0] > 'z') {
+            if (c[0] != ' ' && c[0] != '\n') {
+                freeList();
+                fprintf(stderr, "Invalid input file\n");
+                return EXIT_FAILURE; 
+            }   
+        }
+        
+        char const *code = symToCode(c[0]);
+        
+        if (code != NULL) {
+            writeBits(code, buffer, encoded);
+        }
+    }
+
+    flushBits(buffer, encoded);
+
+    return EXIT_SUCCESS;
 }
