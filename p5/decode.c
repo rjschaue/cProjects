@@ -45,14 +45,12 @@ int main(int argc, char *argv[])
     char c[STRING_BUFFER] = "";
     int cLen = 0;
 
-    BitBuffer *buffer;
-    buffer->bits = 0x0;
-    buffer->bcount = 0;
+    BitBuffer buffer = { 0x00, 0 };
     
     char symbol = '0';
     int bit = 0;
 
-    while ((bit = readBit(buffer, encoded)) != -1) {
+    while ((bit = readBit(&buffer, encoded)) != -1) {
         if (bit == 0) {
             c[cLen] = '0';
             cLen++;

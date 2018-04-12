@@ -44,9 +44,7 @@ int main(int argc, char *argv[])
 
     char c[1] = {};
 
-    BitBuffer *buffer;
-    buffer->bits = 0x00;
-    buffer->bcount = 0;
+    BitBuffer buffer = { 0x00, 0 };
 
     while (fread(c, 1, 1, input) != 0) {
 
@@ -61,11 +59,11 @@ int main(int argc, char *argv[])
         char const *code = symToCode(c[0]);
         
         if (code != NULL) {
-            writeBits(code, buffer, encoded);
+            writeBits(code, &buffer, encoded);
         }
     }
 
-    flushBits(buffer, encoded);
+    flushBits(&buffer, encoded);
 
     return EXIT_SUCCESS;
 }

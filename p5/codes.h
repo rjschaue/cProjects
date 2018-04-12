@@ -32,7 +32,7 @@ typedef struct NodeTag {
 /**
     A struct used to represent a list of nodes
 */
-typedef struct {
+typedef struct List {
     /** The head node of the linked list */
     Node *head;
 } List;

@@ -48,8 +48,13 @@ int readBit( BitBuffer *buffer, FILE *fp )
     }
     
     mask = mask >> buffer->bcount;
-    
-    if((buffer->bits | mask) == 0) {           
+    if (buffer->bcount == BITS_PER_BYTE) {
+        buffer->bcount = 0;
+    } else {
+        buffer->bcount++;
+    }
+
+    if((buffer->bits | mask) == 0) {                   
         return 0;
     } else {
         return 1;

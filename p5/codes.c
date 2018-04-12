@@ -9,7 +9,7 @@
 
 #include "codes.h"
 
-List *list = NULL;
+List list = { NULL };
 
 void populateList(char const *filename ) 
 {
@@ -62,14 +62,14 @@ void populateList(char const *filename )
 
       strcpy(n->binary, binary);
 
-      n->next = list->head;
-      list->head = n;
+      n->next = list.head;
+      list.head = n;
   }
 }
 
 void freeList() 
 {
-    Node *n = list->head;
+    Node *n = list.head;
     while(n) {
         Node *next = n->next;
         free(n);
@@ -79,7 +79,7 @@ void freeList()
 
 const char * symToCode( int ch ) 
 {
-    for (Node *n = list->head; n; n = n->next ) {
+    for (Node *n = list.head; n; n = n->next ) {
         if (ch == n->symbol) {
             return n->binary;
         }
@@ -89,7 +89,7 @@ const char * symToCode( int ch )
 
 int codeToSym( const char *code ) 
 {
-    for (Node *n = list->head; n; n = n->next ) {
+    for (Node *n = list.head; n; n = n->next ) {
         if (strcmp(code, n->binary) == 0) {
             if (n->symbol == 'E') {
                 return -1;

@@ -14,4 +14,4 @@ bits.o: bits.h
 clean:
 	rm -f encode.o decode.o codes.o bits.o
 	rm -f encode decode
-	rm -f output.txt encoded.bin
+	rm -f output.txt encoded.bin stdout.txt stderr.txt
