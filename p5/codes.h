@@ -19,9 +19,9 @@
 /**
    The struct to represent a Node that contains a symbol and it's binary
    representation.
-*/  
+*/
 typedef struct NodeTag {
-    /** A string representing the symbol */ 
+    /** A string representing the symbol */
     char symbol;
     /** A string representing the binary version of the symbol */
     char binary[STRING_BUFFER];

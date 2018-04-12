@@ -17,7 +17,7 @@ void writeBits( const char *code, BitBuffer *buffer, FILE *fp)
         }
 
         char mask = 0x80;
-         
+
         if (code[i] == 1) {
             mask = mask >> buffer->bcount;
             buffer->bits = buffer->bits | mask;
@@ -27,20 +27,20 @@ void writeBits( const char *code, BitBuffer *buffer, FILE *fp)
 }
 
 void flushBits( BitBuffer *buffer, FILE *fp )
-{   
-    fwrite(&(buffer->bits), 1, 1, fp);   
+{
+    fwrite(&(buffer->bits), 1, 1, fp);
 }
 
 int readBit( BitBuffer *buffer, FILE *fp )
-{   
+{
     char mask = 0x80;
 
-    if(buffer->bcount == 0) {
-        if(fread(&(buffer->bits), 1, 1, fp) == 0) {
+    if (buffer->bcount == 0) {
+        if (fread(&(buffer->bits), 1, 1, fp) == 0) {
             return -1;
         }
         buffer->bcount++;
-        if((buffer->bits | mask) == 0) {           
+        if ((buffer->bits | mask) == 0) {
             return 0;
         } else {
             return 1;
@@ -54,7 +54,7 @@ int readBit( BitBuffer *buffer, FILE *fp )
         buffer->bcount++;
     }
 
-    if((buffer->bits | mask) == 0) {                   
+    if ((buffer->bits | mask) == 0) {
         return 0;
     } else {
         return 1;

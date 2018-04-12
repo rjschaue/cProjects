@@ -5,26 +5,26 @@
     This program will take the contents of a code file, store them, and has
     functions to convert them between symbols and binary codes to represent
     the symbols
-*/ 
+*/
 
 #include "codes.h"
 
 List list = { NULL };
 
-void populateList(char const *filename ) 
+void populateList(char const *filename )
 {
   FILE *stream = fopen( filename, "r" );
 
   if (!stream) {
       perror(filename);
       exit(EXIT_FAILURE);
-  }  
+  }
   
   char symbol[STRING_BUFFER] = "";
-  char binary[STRING_BUFFER] = ""; 
-   
+  char binary[STRING_BUFFER] = "";
+
   while (fscanf(stream, "%19s%19s", symbol, binary) == 2) {
-      
+
       if ((symbol[0] < 'a' || symbol[0] > 'z') && strcmp(symbol, "space") != 0
           && strcmp(symbol, "newline") != 0 && strcmp(symbol, "eof") != 0) {
           fprintf(stderr, "Invalid code file\n");
@@ -67,27 +67,27 @@ void populateList(char const *filename )
   }
 }
 
-void freeList() 
+void freeList()
 {
     Node *n = list.head;
-    while(n) {
+    while (n) {
         Node *next = n->next;
         free(n);
         n = next;
     }
 }
 
-const char * symToCode( int ch ) 
+const char * symToCode( int ch )
 {
     for (Node *n = list.head; n; n = n->next ) {
         if (ch == n->symbol) {
             return n->binary;
         }
     }
-    return NULL; 
+    return NULL;
 }
 
-int codeToSym( const char *code ) 
+int codeToSym( const char *code )
 {
     for (Node *n = list.head; n; n = n->next ) {
         if (strcmp(code, n->binary) == 0) {

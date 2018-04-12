@@ -17,7 +17,7 @@
 
     @return program exit status
 */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     if (argc < 4) {
         fprintf(stderr, "usage: decode <codes-file> <infile> <outfile>\n");
@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
             c[cLen] = '\0';
         }
     }
-
+    
+    freeList();
     return EXIT_SUCCESS;
 }

@@ -17,7 +17,7 @@
 
     @return program exit status
 */
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     if (argc < 4) {
         fprintf(stderr, "usage: encode <codes-file> <infile> <outfile>\n");
@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
             if (c[0] != ' ' && c[0] != '\n') {
                 freeList();
                 fprintf(stderr, "Invalid input file\n");
-                return EXIT_FAILURE; 
-            }   
+                return EXIT_FAILURE;
+            }
         }
         
         char const *code = symToCode(c[0]);
@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    freeList();
     flushBits(&buffer, encoded);
 
     return EXIT_SUCCESS;
