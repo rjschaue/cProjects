@@ -10,6 +10,9 @@
 // On the command line, which argument is the input file.
 #define FILE_ARG 2
 
+// Buffer for lines read from input
+#define STRING_BUFFER 1024
+
 // You won't need this function in the final version of your program.
 // It prints out the input string and all matches of the pattern inside
 // it.
@@ -60,39 +63,53 @@ int main( int argc, char *argv[] )
   // the command line, match it against lines from an input file, and
   // report matching lines with occurrences of the matches
   // highlighted.
+  if (argc < 2 || argc > 3) {
+    fprintf(stderr, "usage: regular <pattern> [input-file.txt]\n");
+    return EXIT_FAILURE;
+  }
 
+  FILE *input;
+
+  if (argc > 2) {
+    input = fopen(argv[2], "r");
+    if (!input) {
+      fprintf(stderr, "Can't open input file: %s\n", argv[2]);
+      return EXIT_FAILURE;
+    }
+  }
+
+  Pattern *pat = parsePattern(argv[1]);
   
-  // Try matching a pattern containing just one letter.
-  {
-    // Parse a simple pattern.
-    char *pstr = "b";
-    Pattern *pat = parsePattern( pstr );
-
-    char *str = "abc";
-
-    // Find matches for this pattern.
+  while (true) {
+    char str[STRING_BUFFER];
+    
+    if (input) {
+      if (fscanf(input, "%1023[^\n]%*[\n]", str) > 0) {
+        if (strlen(str) > 100) {
+          fprintf(stderr, "Input line too long\n");
+          return EXIT_FAILURE;
+        }
+      } else {
+        fclose(input);
+        break;
+      }
+    } else {
+      if (scanf("%1023s", str) != EOF) {
+        if (strlen(str) > 100) {
+         fprintf(stderr, "Input line too long\n");
+         return EXIT_FAILURE;
+        }
+      } else {
+        break;
+      }
+    }
+    
     pat->locate( pat, str );
 
-    reportMatches( pat, pstr, str );
-
-    pat->destroy( pat );
+    reportMatches( pat, argv[1], str );
   }
 
-  // Try a pattern with some concatenation and multiple matches.
-  {
-    // Parse a simple pattern.
-    char *pstr = "aba";
-    Pattern *pat = parsePattern( pstr );
-
-    char *str = "ababababababab";
-
-    // Find matches for this pattern.
-    pat->locate( pat, str );
-
-    reportMatches( pat, pstr, str );
-
-    pat->destroy( pat );
-  }
+  pat->destroy( pat );
 
   return EXIT_SUCCESS;
 }
