@@ -142,7 +142,7 @@ static void locateConcatenationPattern( Pattern *pat, const char *str )
 
   initTable( pat, str );
 
-  //  Let our two sub-patterns figure out everywhere they match.
+  // Let our two sub-patterns figure out everywhere they match.
   this->p1->locate( this->p1, str );
   this->p2->locate( this->p2, str );
 
@@ -176,3 +176,84 @@ Pattern *makeConcatenationPattern( Pattern *p1, Pattern *p2 )
   return (Pattern *) this;
 }
 
+// locate function for a BinaryPattern used to handle alternation.
+static void locateAlternationPattern( Pattern *pat, const char *str )
+{
+  // Cast down to the struct type pat really points to.
+  BinaryPattern *this = (BinaryPattern *) pat;
+
+  initTable( pat, str );
+
+  //  Let our two sub-patterns figure out everywhere they match.
+  this->p1->locate( this->p1, str );
+  this->p2->locate( this->p2, str );
+}
+
+// Documented in header.
+Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 )
+{
+  // Make an instance of Binary pattern and fill in its fields.
+  BinaryPattern *this = (BinaryPattern *) malloc( sizeof( BinaryPattern ) );
+  this->table = NULL;
+  this->p1 = p1;
+  this->p2 = p2;
+  
+  this->locate = locateAlternationPattern;
+  this->destroy = destroyBinaryPattern;
+  
+  return (Pattern *) this;
+}
+
+/**
+   Representation for a type of pattern that contains one sub-patterns
+   (e.g., repetition).  This representation could be used by more
+   than one type of pattern, as long as it uses a pointer to a
+   different locate() function.
+*/
+typedef struct {
+  // Fields from our superclass.
+  int len;
+  bool **table;
+  void (*locate)( Pattern *pat, char const *str );
+  void (*destroy)( Pattern *pat );
+  
+  // Pointer to the repeating pattern.
+  Pattern *p;
+} RepetitionPattern;
+
+// destroy function used for RepetitionPattern
+static void destroyRepetitionPattern( Pattern *pat )
+{
+  // Cast down to the struct type pat really points to.
+  RepetitionPattern *this = (RepetitionPattern *) pat;
+
+  // Free our table.
+  freeTable( pat );
+  // Free our sub-pattern.
+  this->p->destroy( this->p );
+  // Free the struct representing this object.
+  free( this );
+}
+
+static void locateRepetitionPattern( Pattern *pat, const char *str ) {
+  // Cast down to the struct type pat really points to.
+  RepetitionPattern *this = (RepetitionPattern *) pat;
+
+  initTable( pat, str );
+
+  //  Let our sub-pattern figure out everywhere it matches.
+  this->p->locate( this->p, str );
+}
+
+//Documented in header.
+Pattern *makeRepetitionPattern( Pattern *p ) 
+{
+  RepetitionPattern *this = (RepetitionPattern *) malloc( sizeof( RepetitionPattern ) );
+  this->table = NULL;
+  this->p = p;
+
+  this->locate = locateRepetitionPattern;
+  this->destroy = destroyRepetitionPattern;
+
+  return (Pattern *) this;
+}

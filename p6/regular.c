@@ -19,32 +19,26 @@
 void reportMatches( Pattern *pat, char const *pstr, char const *str )
 {
   // Report the original string and copies of all the matches.
-  printf( "Pattern: %s\n", pstr );
-  printf( "String:  %s\n", str );
-
   int len = strlen( str );
-  bool mflag = false;
-  for ( int begin = 0; begin <= len; begin++ )
-    for ( int end = begin; end <= len; end++ )
+  bool match = false;
+  for ( int begin = 0; begin <= len; begin++ ) {
+    for ( int end = begin; end <= len; end++ ) {
       if ( matches( pat, begin, end ) ) {
         // Report the matching substring.
-        
+        match = true;
         // Skip over to the start of the match.
-        printf( "Match:   %*s", begin, "" );
+        //printf( "%*s", begin, "" );
         
         // Print the matchng string.
-        for ( int k = begin; k < end; k++ )
-          printf( "%c", str[ k ] );
-        printf( "\n" );
+        //for ( int k = begin; k < end; k++ )
+          //printf( "%c", str[ k ] );
+      } 
+    }
+  }
 
-        // Remember that we found a match.
-        mflag = true;
-      }
-
-  if ( !mflag )
-    printf( "No matches\n" );
-  
-  printf( "\n" );
+  if (match) {     
+    printf( "%s\n", str );
+  }
 }
 
 /**
@@ -105,8 +99,8 @@ int main( int argc, char *argv[] )
     }
     
     pat->locate( pat, str );
-
-    reportMatches( pat, argv[1], str );
+  
+    reportMatches(pat, argv[1], str);
   }
 
   pat->destroy( pat );
