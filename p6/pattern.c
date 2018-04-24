@@ -187,6 +187,15 @@ static void locateAlternationPattern( Pattern *pat, const char *str )
   //  Let our two sub-patterns figure out everywhere they match.
   this->p1->locate( this->p1, str );
   this->p2->locate( this->p2, str );
+
+  // Then, based on their matches, look for all places where their
+  // concatenaton matches.  Check all substrings of the input string.
+  for ( int begin = 0; begin <= this->len; begin++ )
+    for ( int end = begin; end <= this->len; end++ ) {
+      if (matches(this->p1, begin, end) || matches(this->p2, begin,end)) {
+        this->table[begin][end] = true;
+      }
+    }
 }
 
 // Documented in header.

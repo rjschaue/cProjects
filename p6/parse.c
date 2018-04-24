@@ -131,7 +131,9 @@ static Pattern *parseAlternation( char const *str, int *pos )
 {
   Pattern *p1 = parseConcatenation( str, pos );
 
-  while ( str[ *pos ] ) {
+  while ( str[ *pos ] && str[ *pos ] == '|') {
+    (*pos)++;
+    
     Pattern *p2 = parseConcatenation( str, pos );
 
     p1 = makeAlternationPattern( p1, p2 );

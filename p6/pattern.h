@@ -81,8 +81,14 @@ Pattern *makeSymbolPattern( char sym );
 */
 Pattern *makeConcatenationPattern( Pattern *p1, Pattern *p2 );
 
+/**
+  *****DOCUMENT*****
+*/
 Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 );
 
+/**
+  *****DOCUMENT*****
+*/
 Pattern *makeRepetitionPattern( Pattern *p );
 
 #endif

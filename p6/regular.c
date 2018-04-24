@@ -13,6 +13,10 @@
 // Buffer for lines read from input
 #define STRING_BUFFER 1024
 
+#define RED "\x1b[31m"
+
+#define BLACK "\x1b[0m"
+
 // You won't need this function in the final version of your program.
 // It prints out the input string and all matches of the pattern inside
 // it.
@@ -20,24 +24,28 @@ void reportMatches( Pattern *pat, char const *pstr, char const *str )
 {
   // Report the original string and copies of all the matches.
   int len = strlen( str );
-  bool match = false;
+  //bool match = false;
   for ( int begin = 0; begin <= len; begin++ ) {
     for ( int end = begin; end <= len; end++ ) {
       if ( matches( pat, begin, end ) ) {
-        // Report the matching substring.
-        match = true;
-        // Skip over to the start of the match.
-        //printf( "%*s", begin, "" );
+
+        //match = true;
         
+        for (int j = 0; j < begin; j++) 
+          printf( "%c", str[ j ] );
+        
+        printf(RED);
         // Print the matchng string.
-        //for ( int k = begin; k < end; k++ )
-          //printf( "%c", str[ k ] );
+        for ( int k = begin; k < end; k++ )
+          printf( "%c", str[ k ] );
+        
+        printf(BLACK);
+        for ( int l = end; l < len; l++ ) 
+          printf( "%c", str[ l ] );
+
+        printf("\n");
       } 
     }
-  }
-
-  if (match) {     
-    printf( "%s\n", str );
   }
 }
 
