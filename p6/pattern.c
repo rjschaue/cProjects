@@ -214,10 +214,8 @@ Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 )
 }
 
 /**
-   Representation for a type of pattern that contains one sub-patterns
-   (e.g., repetition).  This representation could be used by more
-   than one type of pattern, as long as it uses a pointer to a
-   different locate() function.
+   Representation for a type of pattern that contains one sub-pattern
+   (e.g., repetition).
 */
 typedef struct {
   // Fields from our superclass.
@@ -226,6 +224,8 @@ typedef struct {
   void (*locate)( Pattern *pat, char const *str );
   void (*destroy)( Pattern *pat );
   
+  //The character for the type of repetition pattern (*, +, ?)
+  char type;
   // Pointer to the repeating pattern.
   Pattern *p;
 } RepetitionPattern;
@@ -252,13 +252,32 @@ static void locateRepetitionPattern( Pattern *pat, const char *str ) {
 
   //  Let our sub-pattern figure out everywhere it matches.
   this->p->locate( this->p, str );
+
+  // Then, based on their matches, look for all places where the
+  // pattern matches.  Check all substrings of the input string.
+  bool match = false;
+  for ( int begin = 0; begin <= this->len; begin++ ) {
+    for ( int end = begin; end <= this->len; end++ ) {
+      if (matches(this->p, begin, end)) {
+        this->table[begin][end] = true;
+        match = true;
+      }
+      if (match && this->type == '?') {
+        break;
+      }
+    }
+    if (match && this->type == '?') {
+      break;
+    }
+  }
 }
 
 //Documented in header.
-Pattern *makeRepetitionPattern( Pattern *p ) 
+Pattern *makeRepetitionPattern( char type, Pattern *p ) 
 {
   RepetitionPattern *this = (RepetitionPattern *) malloc( sizeof( RepetitionPattern ) );
   this->table = NULL;
+  this->type = type;
   this->p = p;
 
   this->locate = locateRepetitionPattern;

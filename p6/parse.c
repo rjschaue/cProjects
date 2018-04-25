@@ -46,13 +46,13 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
     return makeSymbolPattern( str[ (*pos)++ ] );
 
   if ( str[ *pos ] == '.' ) {
-    
+    return makeSymbolPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '^' ) {
-
+    return makeSymbolPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '$' ) {
-
+    return makeSymbolPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '[' ) {
-
+     
   } else if ( str[ *pos ] == '(' ) {
     //(*pos)++;
     //Pattern *p = parseAlternation( str, pos );
@@ -79,11 +79,14 @@ static Pattern *parseRepetition( char const *str, int *pos )
   Pattern *p = parseAtomicPattern( str, pos );
 
   if ( str[ *pos ] == '*' ) {
-
+    p = makeRepetitionPattern('*', p);
+    (*pos)++;
   } else if ( str[ *pos ] == '+' ) {
-
+    p = makeRepetitionPattern('+', p);
+    (*pos)++;
   } else if ( str[ *pos ] == '?' ) {
-
+    p = makeRepetitionPattern('?', p);
+    (*pos)++;
   }
 
   return p;

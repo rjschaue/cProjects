@@ -89,6 +89,6 @@ Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 );
 /**
   *****DOCUMENT*****
 */
-Pattern *makeRepetitionPattern( Pattern *p );
+Pattern *makeRepetitionPattern( char type, Pattern *p );
 
 #endif
