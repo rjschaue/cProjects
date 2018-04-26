@@ -24,14 +24,12 @@ void reportMatches( Pattern *pat, char const *pstr, char const *str )
 {
   // Report the original string and copies of all the matches.
   int len = strlen( str );
-  //bool match = false;
+  int pos = 0;
+  bool match = false;
   for ( int begin = 0; begin <= len; begin++ ) {
     for ( int end = begin; end <= len; end++ ) {
-      if ( matches( pat, begin, end ) ) {
-
-        //match = true;
-        
-        for (int j = 0; j < begin; j++) 
+      if ( matches( pat, begin, end ) ) {                      
+        for (int j = pos; j < begin; j++) 
           printf( "%c", str[ j ] );
         
         printf(RED);
@@ -40,12 +38,16 @@ void reportMatches( Pattern *pat, char const *pstr, char const *str )
           printf( "%c", str[ k ] );
         
         printf(BLACK);
-        for ( int l = end; l < len; l++ ) 
-          printf( "%c", str[ l ] );
-
-        printf("\n");
-      } 
+        pos = end;
+        match = true; 
+      }
+    } 
+  }
+  if (match) {
+    for (int i = pos; i < len; i++) {
+      printf( "%c", str[i] );
     }
+    printf("\n");
   }
 }
 
@@ -96,7 +98,7 @@ int main( int argc, char *argv[] )
         break;
       }
     } else {
-      if (scanf("%1023s", str) != EOF) {
+      if (scanf("%1023[^\n]%*[\n]", str) != EOF) {
         if (strlen(str) > 100) {
          fprintf(stderr, "Input line too long\n");
          return EXIT_FAILURE;

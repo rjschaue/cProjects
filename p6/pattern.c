@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define STRING_BUFFER 100
 /** Free the table inside a pattern, if there is one.
 
     @param this The pattern we're supposed to operate on.
@@ -109,7 +110,9 @@ static void locateDotPattern( Pattern *pat, char const *str )
   initTable( pat, str );
 
   for (int begin = 0; str[begin]; begin++) {
-    this->table[begin][begin+1] = true;
+    
+    this->table[begin][begin + 1] = true;
+    
   }
 }
 
@@ -305,18 +308,42 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
   //  Let our sub-pattern figure out everywhere it matches.
   this->p->locate( this->p, str );
 
+  for ( int begin = 0; begin <= this->len ; begin++ ) {
+    if (this->type == '*' || this->type == '?') {
+      this->table[begin][begin] = true;
+    }
+    for ( int end = begin; end <= this->len; end++) {
+      if ( matches(this->p, begin, end)) {
+        this->table[ begin ][ end ] = true;
+        if (this->type != '?') {
+          int length = end - begin;
+          for (int i = length; i < this->len - begin; i+=length) {
+            if (matches(this->p, begin + i, end + i)) {
+              this->table[begin][end + i] = true;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
   // Then, based on their matches, look for all places where the
   // pattern matches.  Check all substrings of the input string.
-  bool match = false;
-  for ( int begin = 0; begin <= this->len; begin++ ) {
+/*  for ( int begin = 0; begin <= this->len; begin++ ) {
     for ( int end = begin; end <= this->len; end++ ) {
       if (matches(this->p, begin, end)) {
         this->table[begin][end] = true;
-        match = true;
 
-        for ( int k = begin; k <= end; k++ ) {
-          if ( matches(this->p, begin, k) ) {
-            this->table[ begin ][ k ] = true;
+        for ( int k = begin + 1; k < this->len; k++ ) {
+          int increment = 1;
+          if ( matches(this->p, k, end + 1) ) {
+            this->table[ begin ][ end + increment ] = true;
+            increment++;
+          } else {
+            break;
           }
         }
 
@@ -326,7 +353,7 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
         }
       } 
     }
-  }
+  } */
 }
 
 //Documented in header.
@@ -351,7 +378,7 @@ typedef struct {
   void (*destroy)( Pattern *pat );
   
   //A string with the different symbols in the brackets
-  char *symbols;
+  char symbols[STRING_BUFFER];
 } BracketPattern;
 
 // destroy function used for BracketPattern
@@ -375,15 +402,9 @@ static void locateBracketPattern( Pattern *pat, char const *str )
   // Make a fresh table for this input string.
   initTable( pat, str );
 
-  // Find all occurreces of the symbol we're supposed to match, and
-  // mark them in the match table as matching, 1-character substrings.
-  for ( int begin = 0; begin <= this->len; begin++ ) {
-   for ( int end = begin; end <= this->len; end++ ) {
-      for ( int i = 0; this->symbols[i]; i++ ) {
-        if ( str[ end ] == this->symbols[i] ) {
-          this->table[ begin ][ end ] = true;
-        }  
-      }
+  for ( int begin = 0; str[ begin ]; begin++ ) {
+    if ( strchr(this->symbols, str[begin]) != NULL ) {
+      this->table[ begin ][ begin + 1 ] = true;
     }
   }
 }
@@ -394,7 +415,7 @@ Pattern *makeBracketPattern( char *symbols )
 {
   BracketPattern *this = (BracketPattern *) malloc( sizeof( BracketPattern ) );
   this->table = NULL;
-  this->symbols = symbols;
+  strcpy(this->symbols, symbols);
 
   this->locate = locateBracketPattern;
   this->destroy = destroyBracketPattern;
