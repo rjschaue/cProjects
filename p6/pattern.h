@@ -69,6 +69,16 @@ bool matches( Pattern *pat, int begin, int end );
 */
 Pattern *makeSymbolPattern( char sym );
 
+/**
+  *****DOCUMENT*****
+*/
+Pattern *makeDotPattern( char sym );
+
+/**
+  *****DOCUMENT*****
+*/
+Pattern *makeAnchorPattern( char sym );
+
 /** 
   Make a pattern for the concatenation of patterns p1 and p2.  It
   should match anything that can be broken into two substrings, s1 and
@@ -91,4 +101,8 @@ Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 );
 */
 Pattern *makeRepetitionPattern( char type, Pattern *p );
 
+/**
+  *****DOCUMENT*****
+*/
+Pattern *makeBracketPattern( char *symbols );
 #endif

@@ -102,6 +102,57 @@ Pattern *makeSymbolPattern( char sym )
   return (Pattern *) this;
 }
 
+static void locateDotPattern( Pattern *pat, char const *str )
+{
+  SymbolPattern *this = (SymbolPattern *) pat;
+
+  initTable( pat, str );
+
+  for (int begin = 0; str[begin]; begin++) {
+    this->table[begin][begin+1] = true;
+  }
+}
+
+//Documented in the header.
+Pattern *makeDotPattern( char sym )
+{
+  SymbolPattern *this = (SymbolPattern *) malloc( sizeof( SymbolPattern ) );
+  this->table = NULL;
+
+  this->locate = locateDotPattern;
+  this->destroy = destroySimplePattern;
+  this->sym = sym;
+
+  return (Pattern *) this;
+}
+
+
+static void locateAnchorPattern( Pattern *pat, char const *str )
+{
+  SymbolPattern *this = (SymbolPattern *) pat;
+
+  initTable( pat, str );
+
+  if (this->sym == '^') {
+    this->table[0][0] = true;
+  } else {
+    this->table[this->len][this->len] = true;
+  }
+}
+
+//Documented in the header.
+Pattern *makeAnchorPattern( char sym )
+{
+  SymbolPattern *this = (SymbolPattern *) malloc( sizeof( SymbolPattern ) );
+  this->table = NULL;
+
+  this->locate = locateAnchorPattern;
+  this->destroy = destroySimplePattern;
+  this->sym = sym;
+
+  return (Pattern *) this;
+}
+
 /**
    Representation for a type of pattern that contains two sub-patterns
    (e.g., concatenation).  This representation could be used by more
@@ -189,7 +240,7 @@ static void locateAlternationPattern( Pattern *pat, const char *str )
   this->p2->locate( this->p2, str );
 
   // Then, based on their matches, look for all places where their
-  // concatenaton matches.  Check all substrings of the input string.
+  // alternaton matches.  Check all substrings of the input string.
   for ( int begin = 0; begin <= this->len; begin++ )
     for ( int end = begin; end <= this->len; end++ ) {
       if (matches(this->p1, begin, end) || matches(this->p2, begin,end)) {
@@ -244,7 +295,8 @@ static void destroyRepetitionPattern( Pattern *pat )
   free( this );
 }
 
-static void locateRepetitionPattern( Pattern *pat, const char *str ) {
+static void locateRepetitionPattern( Pattern *pat, const char *str ) 
+{
   // Cast down to the struct type pat really points to.
   RepetitionPattern *this = (RepetitionPattern *) pat;
 
@@ -261,7 +313,9 @@ static void locateRepetitionPattern( Pattern *pat, const char *str ) {
       if (matches(this->p, begin, end)) {
         this->table[begin][end] = true;
         match = true;
-      }
+      } else if (begin == end) {
+        this->table[begin][end] = true;
+      } 
       if (match && this->type == '?') {
         break;
       }
@@ -282,6 +336,65 @@ Pattern *makeRepetitionPattern( char type, Pattern *p )
 
   this->locate = locateRepetitionPattern;
   this->destroy = destroyRepetitionPattern;
+
+  return (Pattern *) this;
+}
+
+typedef struct {
+  // Fields from our superclass.
+  int len;
+  bool **table;
+  void (*locate)( Pattern *pat, char const *str );
+  void (*destroy)( Pattern *pat );
+  
+  //A string with the different symbols in the brackets
+  char *symbols;
+} BracketPattern;
+
+// destroy function used for BracketPattern
+static void destroyBracketPattern( Pattern *pat )
+{
+  // Cast down to the struct type pat really points to.
+  RepetitionPattern *this = (RepetitionPattern *) pat;
+
+  // Free our table.
+  freeTable( pat );
+  // Free the struct representing this object.
+  free( this );
+}
+
+// Overridden locate() method for a BracketPattern
+static void locateBracketPattern( Pattern *pat, char const *str )
+{
+  // Cast down to the struct type pat really points to.
+  BracketPattern *this = (BracketPattern *) pat;
+
+  // Make a fresh table for this input string.
+  initTable( pat, str );
+
+  // Find all occurreces of the symbol we're supposed to match, and
+  // mark them in the match table as matching, 1-character substrings.
+  for ( int begin = 0; begin <= this->len; begin++ ) {
+   for ( int end = begin; end <= this->len; end++ ) {
+      for ( int i = 0; this->symbols[i]; i++ ) {
+        if ( str[ end ] == this->symbols[i] ) {
+          this->table[ begin ][ end ] = true;
+        }  
+      }
+    }
+  }
+}
+
+
+//Documented in header.
+Pattern *makeBracketPattern( char *symbols ) 
+{
+  BracketPattern *this = (BracketPattern *) malloc( sizeof( BracketPattern ) );
+  this->table = NULL;
+  this->symbols = symbols;
+
+  this->locate = locateBracketPattern;
+  this->destroy = destroyBracketPattern;
 
   return (Pattern *) this;
 }

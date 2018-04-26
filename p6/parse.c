@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define STRING_BUFFER 100
 /**
    Return true if the given character is ordinary, if it should just
    match occurrences of itself.  This returns false for metacharacters
@@ -46,17 +47,33 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
     return makeSymbolPattern( str[ (*pos)++ ] );
 
   if ( str[ *pos ] == '.' ) {
-    return makeSymbolPattern( str[ (*pos)++ ] ); 
+    return makeDotPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '^' ) {
-    return makeSymbolPattern( str[ (*pos)++ ] ); 
+    return makeAnchorPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '$' ) {
-    return makeSymbolPattern( str[ (*pos)++ ] ); 
+    return makeAnchorPattern( str[ (*pos)++ ] ); 
   } else if ( str[ *pos ] == '[' ) {
-     
+    (*pos)++;
+    char bracket[STRING_BUFFER] = "";
+    int bracketPos = 0;
+    while (str[*pos] && str[*pos] != ']') {
+      bracket[bracketPos] = str[*pos];
+      (*pos)++;
+    }
+    if (str[*pos] == ']') {
+      return makeBracketPattern(bracket);
+    }
   } else if ( str[ *pos ] == '(' ) {
-    //(*pos)++;
-    //Pattern *p = parseAlternation( str, pos );
-    //return p;
+    (*pos)++;
+    char paren[STRING_BUFFER] = "";
+    int parenPos = 0;
+    while (str[ *pos ] != ')') {
+      paren[parenPos] = str[ *pos ];
+      (*pos)++;
+      parenPos++;
+    }
+    (*pos)++;
+    return parsePattern(paren);
   }
 
   invalidPattern();
