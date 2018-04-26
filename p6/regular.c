@@ -98,7 +98,7 @@ int main( int argc, char *argv[] )
         break;
       }
     } else {
-      if (scanf("%1023[^\n]%*[\n]", str) != EOF) {
+      if (scanf("%1023[^\n]%*[\n]", str) > 0) {
         if (strlen(str) > 100) {
          fprintf(stderr, "Input line too long\n");
          return EXIT_FAILURE;
