@@ -59,6 +59,7 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
     while (str[*pos] && str[*pos] != ']') {
       bracket[bracketPos] = str[*pos];
       (*pos)++;
+      bracketPos++;
     }
     if (str[*pos] == ']') {
       return makeBracketPattern(bracket);

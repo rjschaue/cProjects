@@ -313,15 +313,18 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
       if (matches(this->p, begin, end)) {
         this->table[begin][end] = true;
         match = true;
+
+        for ( int k = begin; k <= end; k++ ) {
+          if ( matches(this->p, begin, k) ) {
+            this->table[ begin ][ k ] = true;
+          }
+        }
+
       } else if (begin == end) {
-        this->table[begin][end] = true;
+        if (this->type == '*' || this->type == '?') {
+          this->table[begin][end] = true;
+        }
       } 
-      if (match && this->type == '?') {
-        break;
-      }
-    }
-    if (match && this->type == '?') {
-      break;
     }
   }
 }
