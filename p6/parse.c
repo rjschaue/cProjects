@@ -53,16 +53,16 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
 {
   if ( ordinary( str[ *pos ] ) )
     return makeSymbolPattern( str[ (*pos)++ ] );
-  
+
   //Creates a DotPattern if a dot is found
   if ( str[ *pos ] == '.' ) {
-    return makeDotPattern( str[ (*pos)++ ] ); 
+    return makeDotPattern( str[ (*pos)++ ] );
   //Creates an AnchorPattern if a start anchor is found
   } else if ( str[ *pos ] == '^' ) {
-    return makeAnchorPattern( str[ (*pos)++ ] ); 
-  //Creates an AnchorPattern if an end anchor is found 
+    return makeAnchorPattern( str[ (*pos)++ ] );
+  //Creates an AnchorPattern if an end anchor is found
   } else if ( str[ *pos ] == '$' ) {
-    return makeAnchorPattern( str[ (*pos)++ ] ); 
+    return makeAnchorPattern( str[ (*pos)++ ] );
   //Creates a string and makes a BracketPattern if a start bracket is found
   } else if ( str[ *pos ] == '[' ) {
     (*pos)++;
@@ -193,4 +193,3 @@ Pattern *parsePattern( char const *str )
 
   return pat;
 }
-

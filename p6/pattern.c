@@ -14,7 +14,7 @@
 
 /** A buffer for any strings */
 #define STRING_BUFFER 100
-/** 
+/**
     Free the table inside a pattern, if there is one.
 
     @param this The pattern we're supposed to operate on.
@@ -28,12 +28,12 @@ static void freeTable( Pattern *this )
   }
 }
 
-/** 
+/**
     Make and initialize a new match table inside the given pattern,
     large enough to store matches for the given string.
 
     @param this The pattern we're supposed to operate on.
-    @param str The string we're going to store mageches for 
+    @param str The string we're going to store mageches for
 */
 static void initTable( Pattern *this, char const *str )
 {
@@ -72,7 +72,7 @@ static void destroySimplePattern( Pattern *pat )
 
 /**
    Type of pattern used to represent a single, ordinary symbol,
-   like 'a' or '5'. 
+   like 'a' or '5'.
 */
 typedef struct {
   // Fields from our superclass.
@@ -127,7 +127,7 @@ static void locateDotPattern( Pattern *pat, char const *str )
 
   //Set all single symbol occurrences to true
   for (int begin = 0; str[begin]; begin++) {
-    
+
     this->table[begin][begin + 1] = true;
     
   }
@@ -135,7 +135,7 @@ static void locateDotPattern( Pattern *pat, char const *str )
 
 //Documented in the header.
 Pattern *makeDotPattern( char sym )
-{ 
+{
   // Make an instance of the pattern and fill in the states
   SymbolPattern *this = (SymbolPattern *) malloc( sizeof( SymbolPattern ) );
   this->table = NULL;
@@ -149,7 +149,7 @@ Pattern *makeDotPattern( char sym )
 
 // Overridden locate() method for an AnchorPattern
 static void locateAnchorPattern( Pattern *pat, char const *str )
-{ 
+{
    //Cast down to the struct type pat really points to.
   SymbolPattern *this = (SymbolPattern *) pat;
   
@@ -226,7 +226,7 @@ static void locateConcatenationPattern( Pattern *pat, const char *str )
   // concatenaton matches.  Check all substrings of the input string.
   for ( int begin = 0; begin <= this->len; begin++ )
     for ( int end = begin; end <= this->len; end++ ) {
-      
+
       // For the [ begin, end ) range, check all places where it could
       // be split into two substrings, the first matching p1 and the second
       // matching p2.
@@ -268,7 +268,7 @@ static void locateAlternationPattern( Pattern *pat, const char *str )
   // alternaton matches.  Check all substrings of the input string.
   for ( int begin = 0; begin <= this->len; begin++ )
     for ( int end = begin; end <= this->len; end++ ) {
-      if (matches(this->p1, begin, end) || matches(this->p2, begin,end)) {
+      if (matches(this->p1, begin, end) || matches(this->p2, begin, end)) {
         this->table[begin][end] = true;
       }
     }
@@ -321,7 +321,7 @@ static void destroyRepetitionPattern( Pattern *pat )
 }
 
 // Locate function for RepetitionPattern to handle repetition
-static void locateRepetitionPattern( Pattern *pat, const char *str ) 
+static void locateRepetitionPattern( Pattern *pat, const char *str )
 {
   // Cast down to the struct type pat really points to.
   RepetitionPattern *this = (RepetitionPattern *) pat;
@@ -362,7 +362,7 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
 }
 
 //Documented in header.
-Pattern *makeRepetitionPattern( char type, Pattern *p ) 
+Pattern *makeRepetitionPattern( char type, Pattern *p )
 {
   //Make an instance of Repetition pattern and fill in its fields
   RepetitionPattern *this = (RepetitionPattern *) malloc( sizeof( RepetitionPattern ) );
@@ -421,7 +421,7 @@ static void locateBracketPattern( Pattern *pat, char const *str )
 
 
 //Documented in header.
-Pattern *makeBracketPattern( char *symbols ) 
+Pattern *makeBracketPattern( char *symbols )
 {
   //Make an instance of BracketPattern and fill in all its fields
   BracketPattern *this = (BracketPattern *) malloc( sizeof( BracketPattern ) );

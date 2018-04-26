@@ -16,7 +16,7 @@
 /** A short name to use for the Pattern interface. */
 typedef struct PatternStruct Pattern;
 
-/** 
+/**
   Structure used as a superclass/interface for a regular expression
   pattern.  It includes a representation for a resizable 2D table
   where we can record regions (substrings) of an input string that are
@@ -26,22 +26,22 @@ typedef struct PatternStruct Pattern;
   overridable method for freeing resources for the pattern.
 */
 struct PatternStruct {
-  /** 
+  /**
       Length of the current input string, as recorded by the latest call
-      to locate(). 
+      to locate().
   */
   int len;
   
-  /** 
+  /**
       The match table, a (len + 1) X (len + 1) 2D array represented as
       an array of pointers to arrays.  The job of the locate() functon
       is to fill in this table so table[ begin ][ end ] is true if
       this pattern can match the [ begiin, end ) substring of the
-      current input string.  
+      current input string.
   */
   bool **table;
 
-  /** 
+  /**
       Relallocate the match table.  Find all the [ begin, end )
       substrings of input string, str, that match the pattern.  For
       any match, set table[ begin ][ end ] to true in the match
@@ -53,7 +53,7 @@ struct PatternStruct {
   */
   void (*locate)( Pattern *pat, char const *str );
 
-  /** 
+  /**
       Free memory for this pattern, including any subpatterns it contains.
       @param pat pattern to free.
   */
@@ -75,7 +75,7 @@ struct PatternStruct {
  */
 bool matches( Pattern *pat, int begin, int end );
 
-/** 
+/**
     Make a pattern for a single, non-special character, like `a` or `5`.
 
     @param sym The symbol this pattern is supposed to match.
@@ -97,7 +97,7 @@ Pattern *makeDotPattern( char sym );
 */
 Pattern *makeAnchorPattern( char sym );
 
-/** 
+/**
   Make a pattern for the concatenation of patterns p1 and p2.  It
   should match anything that can be broken into two substrings, s1 and
   s2, where the p1 matches the first part (s1) and p2 matches the
