@@ -307,7 +307,8 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
 
   //  Let our sub-pattern figure out everywhere it matches.
   this->p->locate( this->p, str );
-
+  bool match = false;
+  int temp = 0;
   for ( int begin = 0; begin <= this->len ; begin++ ) {
     if (this->type == '*' || this->type == '?') {
       this->table[begin][begin] = true;
@@ -319,7 +320,12 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
           int length = end - begin;
           for (int i = length; i < this->len - begin; i+=length) {
             if (matches(this->p, begin + i, end + i)) {
+              if (match) {
+                this->table[begin][end + temp] = false;
+              }
               this->table[begin][end + i] = true;
+              match = true;
+              temp = i;
             } else {
               break;
             }
@@ -328,32 +334,6 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
       }
     }
   }
-
-
-  // Then, based on their matches, look for all places where the
-  // pattern matches.  Check all substrings of the input string.
-/*  for ( int begin = 0; begin <= this->len; begin++ ) {
-    for ( int end = begin; end <= this->len; end++ ) {
-      if (matches(this->p, begin, end)) {
-        this->table[begin][end] = true;
-
-        for ( int k = begin + 1; k < this->len; k++ ) {
-          int increment = 1;
-          if ( matches(this->p, k, end + 1) ) {
-            this->table[ begin ][ end + increment ] = true;
-            increment++;
-          } else {
-            break;
-          }
-        }
-
-      } else if (begin == end) {
-        if (this->type == '*' || this->type == '?') {
-          this->table[begin][end] = true;
-        }
-      } 
-    }
-  } */
 }
 
 //Documented in header.
@@ -385,7 +365,7 @@ typedef struct {
 static void destroyBracketPattern( Pattern *pat )
 {
   // Cast down to the struct type pat really points to.
-  RepetitionPattern *this = (RepetitionPattern *) pat;
+  BracketPattern *this = (BracketPattern *) pat;
 
   // Free our table.
   freeTable( pat );
