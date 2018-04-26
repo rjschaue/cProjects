@@ -1,10 +1,21 @@
+/**
+    @file pattern.c
+    @author Joey Schauer (rjschaue)
+
+    This program has multiple different types of patterns to be used to
+    create a binary tree representing a given pattern. Functions within will
+    then be used to compare patterns against given strings.
+*/
+
 #include "pattern.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+/** A buffer for any strings */
 #define STRING_BUFFER 100
-/** Free the table inside a pattern, if there is one.
+/** 
+    Free the table inside a pattern, if there is one.
 
     @param this The pattern we're supposed to operate on.
 */
@@ -17,11 +28,13 @@ static void freeTable( Pattern *this )
   }
 }
 
-/** Make and initialize a new match table inside the given pattern,
+/** 
+    Make and initialize a new match table inside the given pattern,
     large enough to store matches for the given string.
 
     @param this The pattern we're supposed to operate on.
-    @param str The string we're going to store mageches for */
+    @param str The string we're going to store mageches for 
+*/
 static void initTable( Pattern *this, char const *str )
 {
   // If we already had a table, free it.
@@ -103,12 +116,16 @@ Pattern *makeSymbolPattern( char sym )
   return (Pattern *) this;
 }
 
+// Overridden locate() method for a DotPattern
 static void locateDotPattern( Pattern *pat, char const *str )
 {
+  //Cast down to the struct type pat really points to.
   SymbolPattern *this = (SymbolPattern *) pat;
 
+  //Make a fresh table for this input string
   initTable( pat, str );
 
+  //Set all single symbol occurrences to true
   for (int begin = 0; str[begin]; begin++) {
     
     this->table[begin][begin + 1] = true;
@@ -118,7 +135,8 @@ static void locateDotPattern( Pattern *pat, char const *str )
 
 //Documented in the header.
 Pattern *makeDotPattern( char sym )
-{
+{ 
+  // Make an instance of the pattern and fill in the states
   SymbolPattern *this = (SymbolPattern *) malloc( sizeof( SymbolPattern ) );
   this->table = NULL;
 
@@ -129,13 +147,16 @@ Pattern *makeDotPattern( char sym )
   return (Pattern *) this;
 }
 
-
+// Overridden locate() method for an AnchorPattern
 static void locateAnchorPattern( Pattern *pat, char const *str )
-{
+{ 
+   //Cast down to the struct type pat really points to.
   SymbolPattern *this = (SymbolPattern *) pat;
-
+  
+  //Make a fresh table for this input string.
   initTable( pat, str );
 
+  //If start anchor, set first slot in table to true, if end, set the last
   if (this->sym == '^') {
     this->table[0][0] = true;
   } else {
@@ -146,6 +167,7 @@ static void locateAnchorPattern( Pattern *pat, char const *str )
 //Documented in the header.
 Pattern *makeAnchorPattern( char sym )
 {
+  //Make an instance of the pattern and fill in the states
   SymbolPattern *this = (SymbolPattern *) malloc( sizeof( SymbolPattern ) );
   this->table = NULL;
 
@@ -298,6 +320,7 @@ static void destroyRepetitionPattern( Pattern *pat )
   free( this );
 }
 
+// Locate function for RepetitionPattern to handle repetition
 static void locateRepetitionPattern( Pattern *pat, const char *str ) 
 {
   // Cast down to the struct type pat really points to.
@@ -307,6 +330,8 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
 
   //  Let our sub-pattern figure out everywhere it matches.
   this->p->locate( this->p, str );
+
+  // Check through the sub-pattern for repetition depending on the type of pattern
   bool match = false;
   int temp = 0;
   for ( int begin = 0; begin <= this->len ; begin++ ) {
@@ -339,6 +364,7 @@ static void locateRepetitionPattern( Pattern *pat, const char *str )
 //Documented in header.
 Pattern *makeRepetitionPattern( char type, Pattern *p ) 
 {
+  //Make an instance of Repetition pattern and fill in its fields
   RepetitionPattern *this = (RepetitionPattern *) malloc( sizeof( RepetitionPattern ) );
   this->table = NULL;
   this->type = type;
@@ -350,6 +376,10 @@ Pattern *makeRepetitionPattern( char type, Pattern *p )
   return (Pattern *) this;
 }
 
+/**
+    Representation for a type of pattern that contains a string of symbols
+    (e.g. brackets)
+*/
 typedef struct {
   // Fields from our superclass.
   int len;
@@ -393,6 +423,7 @@ static void locateBracketPattern( Pattern *pat, char const *str )
 //Documented in header.
 Pattern *makeBracketPattern( char *symbols ) 
 {
+  //Make an instance of BracketPattern and fill in all its fields
   BracketPattern *this = (BracketPattern *) malloc( sizeof( BracketPattern ) );
   this->table = NULL;
   strcpy(this->symbols, symbols);

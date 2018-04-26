@@ -1,3 +1,11 @@
+/**
+    @file regular.c
+    @author Joey Schauer (rjschaue)
+
+    This program will take a regular expression and compare it against any
+    number of given strings.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,33 +21,42 @@
 // Buffer for lines read from input
 #define STRING_BUFFER 1024
 
+// Red ANSI escape code
 #define RED "\x1b[31m"
 
+// Black ANSI escape code
 #define BLACK "\x1b[0m"
 
-// You won't need this function in the final version of your program.
-// It prints out the input string and all matches of the pattern inside
-// it.
-void reportMatches( Pattern *pat, char const *pstr, char const *str )
+/**
+  Function used to print out all matches
+  @param pat is the pattern to match to the string
+  @param str is the string to be matched to the pattern
+*/
+void reportMatches( Pattern *pat, char const *str )
 {
-  // Report the original string and copies of all the matches.
+  // Report all the matches.
   int len = strlen( str );
   int pos = 0;
   bool match = false;
   for ( int begin = 0; begin <= len; begin++ ) {
     for ( int end = begin; end <= len; end++ ) {
       if ( matches( pat, begin, end ) ) {                      
-        for (int j = pos; j < begin; j++) 
-          printf( "%c", str[ j ] );
+        bool more = false;
+        if (end < len && matches(pat, begin, end + 1)) {
+          more = true;
+        }
+        if (!more) {
+          for (int j = pos; j < begin; j++) 
+            printf( "%c", str[ j ] );
+            printf(RED);
+            // Print the matchng string.
+          for ( int k = begin; k < end; k++ )
+            printf( "%c", str[ k ] );
         
-        printf(RED);
-        // Print the matchng string.
-        for ( int k = begin; k < end; k++ )
-          printf( "%c", str[ k ] );
-        
-        printf(BLACK);
-        pos = end;
-        match = true; 
+          printf(BLACK);
+          pos = end;
+          match = true;
+        }
       }
     } 
   }
@@ -48,7 +65,7 @@ void reportMatches( Pattern *pat, char const *pstr, char const *str )
       printf( "%c", str[i] );
     }
     printf("\n");
-  }
+  } 
 }
 
 /**
@@ -61,18 +78,14 @@ void reportMatches( Pattern *pat, char const *pstr, char const *str )
 */
 int main( int argc, char *argv[] )
 {
-  // Temporary code to show how the pattern matching mechanism is
-  // supposed to work.  You'll need to replace this with code to do
-  // what the program is actually supposed to do, get a pattern from
-  // the command line, match it against lines from an input file, and
-  // report matching lines with occurrences of the matches
-  // highlighted.
+  //Prints error if invalid number of command line arguments 
   if (argc < 2 || argc > 3) {
     fprintf(stderr, "usage: regular <pattern> [input-file.txt]\n");
     return EXIT_FAILURE;
   }
-
-  FILE *input;
+  
+  //Creates new file then attempts to open given input file
+  FILE *input = NULL;
 
   if (argc > 2) {
     input = fopen(argv[2], "r");
@@ -81,9 +94,11 @@ int main( int argc, char *argv[] )
       return EXIT_FAILURE;
     }
   }
-
+  
+  //Parses the given pattern from the command line
   Pattern *pat = parsePattern(argv[1]);
   
+  //Loop to iterate through a given input file or arguments from the command line
   while (true) {
     char str[STRING_BUFFER];
     
@@ -107,12 +122,14 @@ int main( int argc, char *argv[] )
         break;
       }
     }
-    
+    //Locates all pattern matches in the string
     pat->locate( pat, str );
   
-    reportMatches(pat, argv[1], str);
+    //Prints out all matches
+    reportMatches(pat, str);
   }
-
+  
+  //Frees memory from all patterns
   pat->destroy( pat );
 
   return EXIT_SUCCESS;

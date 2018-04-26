@@ -1,3 +1,10 @@
+/**
+    @file parse.h
+    @author Joey Schauer
+
+    This is the header for parse.c
+*/
+
 #ifndef PARSE_H
 #define PARSE_H
 

@@ -1,8 +1,16 @@
+/**
+    @file parse.c
+    @author Joey Schauer (rjschaue)
+
+    This program takes a given pattern and parses it into a binary tree
+*/
+
 #include "parse.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+/** A buffer for strings */
 #define STRING_BUFFER 100
 /**
    Return true if the given character is ordinary, if it should just
@@ -45,13 +53,17 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
 {
   if ( ordinary( str[ *pos ] ) )
     return makeSymbolPattern( str[ (*pos)++ ] );
-
+  
+  //Creates a DotPattern if a dot is found
   if ( str[ *pos ] == '.' ) {
     return makeDotPattern( str[ (*pos)++ ] ); 
+  //Creates an AnchorPattern if a start anchor is found
   } else if ( str[ *pos ] == '^' ) {
     return makeAnchorPattern( str[ (*pos)++ ] ); 
+  //Creates an AnchorPattern if an end anchor is found 
   } else if ( str[ *pos ] == '$' ) {
     return makeAnchorPattern( str[ (*pos)++ ] ); 
+  //Creates a string and makes a BracketPattern if a start bracket is found
   } else if ( str[ *pos ] == '[' ) {
     (*pos)++;
     char bracket[STRING_BUFFER] = "";
@@ -66,6 +78,7 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
       (*pos)++;
       return makeBracketPattern(bracket);
     }
+  //Creates a string and parses a new pattern if a start parenthesis is found
   } else if ( str[ *pos ] == '(' ) {
     (*pos)++;
     char paren[STRING_BUFFER] = "";
@@ -97,7 +110,8 @@ static Pattern *parseAtomicPattern( char const *str, int *pos )
 static Pattern *parseRepetition( char const *str, int *pos )
 {
   Pattern *p = parseAtomicPattern( str, pos );
-
+  
+  //Makes a RepetitionPattern depending on the given repetition symbol
   if ( str[ *pos ] == '*' ) {
     p = makeRepetitionPattern('*', p);
     (*pos)++;
@@ -153,12 +167,13 @@ static Pattern *parseConcatenation( char const *str, int *pos )
 static Pattern *parseAlternation( char const *str, int *pos )
 {
   Pattern *p1 = parseConcatenation( str, pos );
-
+  
+  //If an alternation symbol is found, parse additional patterns
   while ( str[ *pos ] && str[ *pos ] == '|') {
     (*pos)++;
     
     Pattern *p2 = parseConcatenation( str, pos );
-
+    //Builds an alternation pattern
     p1 = makeAlternationPattern( p1, p2 );
   }
 

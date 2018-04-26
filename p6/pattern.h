@@ -1,3 +1,10 @@
+/**
+    @file pattern.h
+    @author Joey Schauer (rjschaue)
+
+    The header file for pattern.c
+*/
+
 #ifndef PATTERN_H
 #define PATTERN_H
 
@@ -19,18 +26,23 @@ typedef struct PatternStruct Pattern;
   overridable method for freeing resources for the pattern.
 */
 struct PatternStruct {
-  /** Length of the current input string, as recorded by the latest call
-      to locate(). */
+  /** 
+      Length of the current input string, as recorded by the latest call
+      to locate(). 
+  */
   int len;
   
-  /** The match table, a (len + 1) X (len + 1) 2D array represented as
+  /** 
+      The match table, a (len + 1) X (len + 1) 2D array represented as
       an array of pointers to arrays.  The job of the locate() functon
       is to fill in this table so table[ begin ][ end ] is true if
       this pattern can match the [ begiin, end ) substring of the
-      current input string.  */
+      current input string.  
+  */
   bool **table;
 
-  /** Relallocate the match table.  Find all the [ begin, end )
+  /** 
+      Relallocate the match table.  Find all the [ begin, end )
       substrings of input string, str, that match the pattern.  For
       any match, set table[ begin ][ end ] to true in the match
       table.
@@ -41,13 +53,15 @@ struct PatternStruct {
   */
   void (*locate)( Pattern *pat, char const *str );
 
-  /** Free memory for this pattern, including any subpatterns it contains.
+  /** 
+      Free memory for this pattern, including any subpatterns it contains.
       @param pat pattern to free.
   */
   void (*destroy)( Pattern *pat );
 };
 
-/** Report elements of the match table for the given pattern.  This
+/**
+    Report elements of the match table for the given pattern.  This
     can be called after the pattern's locate() function, to see where
     it found a match.  It's like a non-overridable instance method for
     the Pattern object.
@@ -62,20 +76,24 @@ struct PatternStruct {
 bool matches( Pattern *pat, int begin, int end );
 
 /** 
-  Make a pattern for a single, non-special character, like `a` or `5`.
+    Make a pattern for a single, non-special character, like `a` or `5`.
 
-  @param sym The symbol this pattern is supposed to match.
-  @return A dynamically allocated representation for this new pattern.
+    @param sym The symbol this pattern is supposed to match.
+    @return A dynamically allocated representation for this new pattern.
 */
 Pattern *makeSymbolPattern( char sym );
 
 /**
-  *****DOCUMENT*****
+    Make a pattern for the dot special character '.'
+
+    @param sym the dot symbol
 */
 Pattern *makeDotPattern( char sym );
 
 /**
-  *****DOCUMENT*****
+    Make a pattern for the anchor special characters '^' and '$'
+
+    @param sym which anchor it is '^' start or '$' end
 */
 Pattern *makeAnchorPattern( char sym );
 
@@ -92,17 +110,29 @@ Pattern *makeAnchorPattern( char sym );
 Pattern *makeConcatenationPattern( Pattern *p1, Pattern *p2 );
 
 /**
-  *****DOCUMENT*****
+    Make a pattern for the alternation of patterns p1 and p2. It should
+    match either of the two substrings.
+
+    @param p1 The first subpattern for matching.
+    @param p2 The second subpattern for matching.
+    @return A dynamically allocated representation for this new pattern.
 */
 Pattern *makeAlternationPattern( Pattern *p1, Pattern *p2 );
 
 /**
-  *****DOCUMENT*****
+    Make a pattern for the repetition of a given pattern p.
+
+    @param p Is the pattern for match for repetition.
+    @return A dynamically allocated representation for this new pattern.
 */
 Pattern *makeRepetitionPattern( char type, Pattern *p );
 
 /**
-  *****DOCUMENT*****
+    Make a pattern for the given set of symbols. Check to see if any of the
+    symbols within brackets are represented.
+
+    @param symbols is a string of characters to be checked.
+    @return A dynamically allocated representation for the new pattern.
 */
 Pattern *makeBracketPattern( char *symbols );
 #endif
