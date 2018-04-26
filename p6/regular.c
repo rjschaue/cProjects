@@ -68,7 +68,7 @@ void reportMatches( Pattern *pat, char const *str )
       printf( "%c", str[i] );
     }
     printf("\n");
-  } 
+  }
 }
 
 /**
@@ -82,7 +82,7 @@ void reportMatches( Pattern *pat, char const *str )
 int main( int argc, char *argv[] )
 {
   //Prints error if invalid number of command line arguments
-  if (argc < 2 || argc > 3) {
+  if (argc < FILE_ARG || argc > (FILE_ARG + 1)) {
     fprintf(stderr, "usage: regular <pattern> [input-file.txt]\n");
     return EXIT_FAILURE;
   }
@@ -90,10 +90,10 @@ int main( int argc, char *argv[] )
   //Creates new file then attempts to open given input file
   FILE *input = NULL;
 
-  if (argc > 2) {
+  if (argc > FILE_ARG) {
     input = fopen(argv[FILE_ARG], "r");
     if (!input) {
-      fprintf(stderr, "Can't open input file: %s\n", argv[2]);
+      fprintf(stderr, "Can't open input file: %s\n", argv[FILE_ARG]);
       return EXIT_FAILURE;
     }
   }
@@ -127,7 +127,7 @@ int main( int argc, char *argv[] )
     }
     //Locates all pattern matches in the string
     pat->locate( pat, str );
-  
+
     //Prints out all matches
     reportMatches(pat, str);
   }
